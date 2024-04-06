@@ -51,5 +51,10 @@ namespace PrivacyFinalProject.View
         {
             throw new NotImplementedException();
         }
+
+        private void btnCreateAccount_Click(object sender, RoutedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

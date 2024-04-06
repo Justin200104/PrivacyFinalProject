@@ -257,18 +257,39 @@
                     <StackPanel Orientation="Horizontal"
                                 HorizontalAlignment="Center"
                                 Margin="0,15,0,0">
-                        
-                        <TextBlock Text="Forgot Password?"
-                               Foreground="DarkGray"
-                               FontSize="12"
-                               FontWeight="Medium"
-                               FontFamily="Montserrat"/>
+
+                        <Button x:Name="btnCreateAccount"  
+                                BorderThickness="0"
+                                Content="Create Account"
+                                Background="Transparent"
+                                Foreground="White"
+                                FontSize="12"
+                                FontFamily="Montserrat"
+                                Cursor="Hand"                           
+                                Margin="8,0,0,0"
+                                Padding="0,0,0,5"
+                                Click="btnCreateAccount_Click">     
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Background" Value="Transparent" />
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="Button">
+                                                <Grid Background="{TemplateBinding Background}">
+                                                    <ContentPresenter />
+                                                </Grid>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </Button.Style>
+                        </Button>
 
                         <Button x:Name="btnResetPassword"  
                                 BorderThickness="0"
-                                Content="Reset"
+                                Content="Forgot Password?"
                                 Background="Transparent"
-                                Foreground="White"
+                                Foreground="DarkGray"
                                 FontSize="12"
                                 FontFamily="Montserrat"
                                 Cursor="Hand"                           
