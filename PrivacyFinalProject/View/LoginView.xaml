@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PrivacyFinalProject.View"
         mc:Ignorable="d"
-        Title="LoginView" Height="550" Width="800"
+        Title="LoginView" Height="618" Width="1000"
         WindowStyle="None"
         ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen"
@@ -146,7 +146,7 @@
                                FontFamily="Montserrat"
                                HorizontalAlignment="Center"/>
 
-                    <TextBlock Text="A Privacy-Focused Chatting Application"
+                    <TextBlock Text="Welcome Back!"
                                Foreground="White"
                                FontSize="14"
                                FontWeight="Medium"
@@ -155,28 +155,28 @@
                                TextAlignment="Center"
                                Margin="0,5,0,0"/>
 
-                    <TextBlock Text="Username"
+                    <TextBlock Text="First Name"
                                Foreground="White"
                                FontSize="12"
                                FontWeight="Medium"
                                FontFamily="Montserrat"                             
-                               Margin="0,35,0,0"/>
+                               Margin="0,20,0,0"/>
 
-                    <TextBox x:Name="txtUser"
-                             FontSize="13"
-                             FontWeight="Medium"
-                             FontFamily="Montserrat"                            
-                             Foreground="White"
-                             CaretBrush="LightGray"
-                             BorderBrush="DarkGray"
-                             BorderThickness="0,0,0,1"
-                             Height="28"
-                             VerticalContentAlignment="Center"
-                             Margin="0,5,0,0"
-                             Padding="30,0,0,0">
+                    <TextBox x:Name="txtUserFirst"
+                                FontSize="13"
+                                FontWeight="Medium"
+                                FontFamily="Montserrat"                            
+                                Foreground="White"
+                                CaretBrush="LightGray"
+                                BorderBrush="DarkGray"
+                                BorderThickness="0,0,0,1"
+                                Height="28"
+                                VerticalContentAlignment="Center"
+                                Margin="0,5,0,0"
+                                Padding="30,0,0,0">
 
                         <TextBox.Background>
-                            <ImageBrush ImageSource="/Images/user-icon.png" Stretch="Uniform" AlignmentX="Left">
+                            <ImageBrush ImageSource="/Images/user-first.png" Stretch="Uniform" AlignmentX="Left">
                                 <ImageBrush.Transform>
                                     <TransformGroup>
                                         <ScaleTransform/>
@@ -185,7 +185,41 @@
                                         <TranslateTransform X="-1"/>
                                     </TransformGroup>
                                 </ImageBrush.Transform>
-                                </ImageBrush>
+                            </ImageBrush>
+                        </TextBox.Background>
+                    </TextBox>
+
+                    <TextBlock Text="Last Name"
+                                Foreground="White"
+                                FontSize="12"
+                                FontWeight="Medium"
+                                FontFamily="Montserrat"                             
+                                Margin="0,15,0,0"/>
+
+                    <TextBox x:Name="txtUserLast"
+                                FontSize="13"
+                                FontWeight="Medium"
+                                FontFamily="Montserrat"                            
+                                Foreground="White"
+                                CaretBrush="LightGray"
+                                BorderBrush="DarkGray"
+                                BorderThickness="0,0,0,1"
+                                Height="28"
+                                VerticalContentAlignment="Center"
+                                Margin="0,5,0,0"
+                                Padding="30,0,0,0">
+
+                        <TextBox.Background>
+                            <ImageBrush ImageSource="/Images/user-last.png" Stretch="Uniform" AlignmentX="Left">
+                                <ImageBrush.Transform>
+                                    <TransformGroup>
+                                        <ScaleTransform/>
+                                        <SkewTransform/>
+                                        <RotateTransform/>
+                                        <TranslateTransform X="-1"/>
+                                    </TransformGroup>
+                                </ImageBrush.Transform>
+                            </ImageBrush>
                         </TextBox.Background>
                     </TextBox>
 
@@ -230,7 +264,7 @@
                             FontSize="12"
                             FontFamily="Montserrat"
                             Cursor="Hand"                           
-                            Margin="0,50,0,0"
+                            Margin="0,35,0,0"
                             Click="btnLogin_Click">
                         <Button.Style>
                             <Style TargetType="Button">
@@ -295,7 +329,7 @@
                                 Cursor="Hand"                           
                                 Margin="8,0,0,0"
                                 Padding="0,0,0,5"
-                                Click="btnResetPassword_Click">
+                                Click="btnForgotPassword_Click">
                             <Button.Style>
                                 <Style TargetType="Button">
                                     <Setter Property="Background" Value="Transparent" />

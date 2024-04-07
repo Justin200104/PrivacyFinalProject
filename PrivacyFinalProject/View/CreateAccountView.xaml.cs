@@ -15,18 +15,18 @@ using System.Windows.Shapes;
 namespace PrivacyFinalProject.View
 {
     /// <summary>
-    /// Interaction logic for LoginView.xaml
+    /// Interaction logic for CreateAccount.xaml
     /// </summary>
-    public partial class LoginView : Window
+    public partial class CreateAccountView : Window
     {
-        public LoginView()
+        public CreateAccountView()
         {
             InitializeComponent();
         }
 
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (e.LeftButton==MouseButtonState.Pressed)
+            if (e.LeftButton == MouseButtonState.Pressed)
             {
                 DragMove();
             }
@@ -42,17 +42,17 @@ namespace PrivacyFinalProject.View
             Application.Current.Shutdown();
         }
 
-        private void btnLogin_Click(object sender, RoutedEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
-        private void btnForgotPassword_Click(object sender, RoutedEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
         private void btnCreateAccount_Click(object sender, RoutedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void btnResetPassword_Click(object sender, RoutedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void btnLogin_Click(object sender, RoutedEventArgs e)
         {
             throw new NotImplementedException();
         }
