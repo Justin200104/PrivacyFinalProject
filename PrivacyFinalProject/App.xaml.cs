@@ -1,6 +1,4 @@
-﻿using PrivacyFinalProject.Stores;
-using PrivacyFinalProject.ViewModel;
-using System.Configuration;
+﻿using System.Configuration;
 using System.Data;
 using System.Windows;
 
@@ -11,8 +9,6 @@ namespace PrivacyFinalProject
     /// </summary>
     public partial class App : Application
     {
-
-        private readonly IServiceProvider _serviceProvider;
 
     }
 }

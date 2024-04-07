@@ -44,7 +44,7 @@ namespace PrivacyFinalProject.View
 
         private void btnLogin_Click(object sender, RoutedEventArgs e)
         {
-            //throw new NotImplementedException();
+            throw new NotImplementedException();
             
         }
 
@@ -55,7 +55,15 @@ namespace PrivacyFinalProject.View
 
         private void btnCreateAccount_Click(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
+
+            this.Hide();
+
+            CreateAccountView createAccountView = new CreateAccountView();
+            createAccountView.Show();
+
+            createAccountView.Activate();
+
         }
     }
 }
