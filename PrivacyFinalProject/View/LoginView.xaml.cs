@@ -44,7 +44,8 @@ namespace PrivacyFinalProject.View
 
         private void btnLogin_Click(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
+            
         }
 
         private void btnForgotPassword_Click(object sender, RoutedEventArgs e)

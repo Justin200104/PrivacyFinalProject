@@ -12,6 +12,8 @@
         Background="Transparent"
         AllowsTransparency="True"
         MouseDown="Window_MouseDown">
+    
+    
 
     <Border CornerRadius="50"
             Opacity="0.90">
