@@ -59,8 +59,6 @@
 						<ColumnDefinition Width="5"/>
 					</Grid.ColumnDefinitions>
 
-                    
-
 					<Button x:Name="btnMinimize"
 							BorderThickness="0"
 							Content="-"
@@ -288,6 +286,21 @@
                             </ImageBrush>
                         </PasswordBox.Background>
                     </PasswordBox>
+                    
+                    <!-- Add a checkbox for consent -->
+                    <CheckBox x:Name="chkConsent"
+							  Foreground="White"
+							  FontSize="12"
+							  FontWeight="Medium"
+							  FontFamily="Montserrat"
+							  Margin="0,20,0,0">	
+						<TextBlock>	
+							<Run Text="I agree to the "/>
+							<Hyperlink Click="btnPrivacyPolicy_Click">
+							<Run Text="Privacy Policy"/>
+							</Hyperlink>
+                        </TextBlock>
+                    </CheckBox>
 
 
                     <Button x:Name="btnCreateAccount"                          

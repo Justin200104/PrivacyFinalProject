@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -55,6 +56,33 @@ namespace PrivacyFinalProject.View
         private void btnLogin_Click(object sender, RoutedEventArgs e)
         {
             throw new NotImplementedException();
+        }
+
+        private void btnPrivacyPolicy_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                string pdfFileName = "SECU74010_Project.pdf"; // Update with your PDF file name
+                string workingDirectory = Environment.CurrentDirectory;
+                string projectDirectory = Directory.GetParent(workingDirectory).Parent.Parent.FullName;
+                string pdfFilePath = System.IO.Path.Combine(projectDirectory, "Resources", pdfFileName);
+
+                System.Diagnostics.ProcessStartInfo psi = new System.Diagnostics.ProcessStartInfo
+                {
+                    FileName = pdfFilePath,
+                    UseShellExecute = true
+                };
+
+                System.Diagnostics.Process.Start(psi);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Failed to open the PDF file. Error: " + ex.Message);
+            }
+
+
+
+
         }
     }
 }
