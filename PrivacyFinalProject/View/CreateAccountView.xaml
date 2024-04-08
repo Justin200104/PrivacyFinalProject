@@ -20,7 +20,11 @@
 						Stretch="UniformToFill" />
 		</Border.Background>
 
-		<Border CornerRadius="20"
+        <Border.Effect>
+            <DropShadowEffect BlurRadius="2" ShadowDepth="0.5" />
+        </Border.Effect>
+
+        <Border CornerRadius="20"
 				BorderThickness="2"
 				Opacity="0.85">
 

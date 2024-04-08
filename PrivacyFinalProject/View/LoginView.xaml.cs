@@ -55,14 +55,18 @@ namespace PrivacyFinalProject.View
 
         private void btnCreateAccount_Click(object sender, RoutedEventArgs e)
         {
-            //throw new NotImplementedException();
+            // throw new NotImplementedException();
 
-            this.Hide();
-
+            // Create and show the CreateAccountView window.
             CreateAccountView createAccountView = new CreateAccountView();
             createAccountView.Show();
 
+            // Optionally, you can bring the new window to the foreground.
             createAccountView.Activate();
+
+            // Close the current login window or hide it before showing the new window.
+            this.Close(); // Use this if you want to close the login window.
+            // this.Hide(); // Use this if you just want to hide the login window.
 
         }
     }
