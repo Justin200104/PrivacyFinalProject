@@ -80,7 +80,7 @@
             <ImageBrush ImageSource="/Images/back-image.jpg"
                         Stretch="UniformToFill" />
         </Border.Background>
-        
+
         <Border.Effect>
             <DropShadowEffect BlurRadius="2" ShadowDepth="0.5" />
         </Border.Effect>
@@ -119,9 +119,9 @@
                         <ColumnDefinition Width="5"/>
                     </Grid.ColumnDefinitions>
 
-                    <TextBlock Text="CHAT ROOM"
+                    <TextBlock Text="P s e u d o  C h a t"
                                Foreground="White"
-                               FontSize="10"
+                               FontSize="16"
                                FontFamily="Montserrat"
                                Grid.Column="0"
                                VerticalAlignment="Center" 

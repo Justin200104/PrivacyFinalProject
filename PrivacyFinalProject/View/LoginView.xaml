@@ -61,14 +61,6 @@
                         <ColumnDefinition Width="5"/>
                     </Grid.ColumnDefinitions>
 
-                    <TextBlock Text="LOG IN"
-                               Foreground="White"
-                               FontSize="10"
-                               FontFamily="Montserrat"
-                               Grid.Column="0"
-                               VerticalAlignment="Center" 
-                               Margin="10,0,0,0"/>
-
                     <Button x:Name="btnMinimize"
                             BorderThickness="0"
                             Content="-"
