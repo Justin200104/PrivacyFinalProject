@@ -44,30 +44,52 @@ namespace PrivacyFinalProject.View
 
         private void btnLogin_Click(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+
+            // Get Credentials
+
+
+            // Validate Credentials
+
+
+            // Create and show the ChatView window.
+            ChatView chatView = new ChatView();
+            chatView.Show();
+
+            // Bring the new window to the foreground.
+            chatView.Activate();
+
+            // Close the current window or hide it before showing the new window.
+            this.Close(); // Use this if you want to close the current window.
+            // this.Hide(); // Use this if you just want to hide the current window.
             
         }
 
-        private void btnForgotPassword_Click(object sender, RoutedEventArgs e)
+        private void btnResetPassword_Click(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            // Create and show the ResetPasswordView window.
+            ResetPasswordView resetPasswordView = new ResetPasswordView();
+            resetPasswordView.Show();
+
+            // Bring the new window to the foreground.
+            resetPasswordView.Activate();
+
+            // Close the current window or hide it before showing the new window.
+            this.Close(); // Use this if you want to close the current window.
+            // this.Hide(); // Use this if you just want to hide the current window.
         }
 
         private void btnCreateAccount_Click(object sender, RoutedEventArgs e)
         {
-            // throw new NotImplementedException();
-
             // Create and show the CreateAccountView window.
             CreateAccountView createAccountView = new CreateAccountView();
             createAccountView.Show();
 
-            // Optionally, you can bring the new window to the foreground.
+            // Bring the new window to the foreground.
             createAccountView.Activate();
 
-            // Close the current login window or hide it before showing the new window.
-            this.Close(); // Use this if you want to close the login window.
-            // this.Hide(); // Use this if you just want to hide the login window.
-
+            // Close the current window or hide it before showing the new window.
+            this.Close(); // Use this if you want to close the current window.
+            // this.Hide(); // Use this if you just want to hide the current window.
         }
     }
 }

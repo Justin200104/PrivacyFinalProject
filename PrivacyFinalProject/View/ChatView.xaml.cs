@@ -60,7 +60,18 @@ namespace PrivacyFinalProject.View
 
         private void btnLeaveChat_Click(object sender, RoutedEventArgs e)
         {
-            Application.Current.Shutdown();
+            // Log the user out
+
+            // Create and show the LoginView window.
+            LoginView loginView = new LoginView();
+            loginView.Show();
+
+            // Bring the new window to the foreground.
+            loginView.Activate();
+
+            // Close the current window or hide it before showing the new window.
+            this.Close(); // Use this if you want to close the current window.
+            // this.Hide(); // Use this if you just want to hide the current window.
         }
 
         private void btnSendMessage_Click(object sender, RoutedEventArgs e)

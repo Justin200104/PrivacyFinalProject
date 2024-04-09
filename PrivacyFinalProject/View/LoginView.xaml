@@ -262,7 +262,7 @@
                             FontSize="12"
                             FontFamily="Montserrat"
                             Cursor="Hand"                           
-                            Margin="0,35,0,0"
+                            Margin="0,25,0,10"
                             Click="btnLogin_Click">
                         <Button.Style>
                             <Style TargetType="Button">
@@ -319,7 +319,7 @@
 
                         <Button x:Name="btnResetPassword"  
                                 BorderThickness="0"
-                                Content="Forgot Password?"
+                                Content="Reset Password"
                                 Background="Transparent"
                                 Foreground="DarkGray"
                                 FontSize="12"
@@ -327,7 +327,7 @@
                                 Cursor="Hand"                           
                                 Margin="8,0,0,0"
                                 Padding="0,0,0,5"
-                                Click="btnForgotPassword_Click">
+                                Click="btnResetPassword_Click">
                             <Button.Style>
                                 <Style TargetType="Button">
                                     <Setter Property="Background" Value="Transparent" />

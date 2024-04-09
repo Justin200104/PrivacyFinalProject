@@ -310,7 +310,7 @@
 							FontSize="12"
 							FontFamily="Montserrat"
 							Cursor="Hand"                           
-							Margin="0,35,0,0"
+							Margin="0,20,0,0"
 							Click="btnCreateAccount_Click">
 						<Button.Style>
 							<Style TargetType="Button">
