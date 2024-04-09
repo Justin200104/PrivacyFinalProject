@@ -292,9 +292,7 @@
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
 
-                            <!--- <TextBox x:Name="messageTextBox" Foreground="White" Background="#40444B00" FontFamily="Montserrat" BorderBrush="DarkGray" BorderThickness="0,0,0,1" Grid.Column="0" Margin="10,5,10,5" Padding="5,0,5,0"/> -->
-
-                            <TextBox x:Name="messageTextBox"
+                            <TextBox x:Name="txtMessage"
                                         FontSize="13"
                                         FontWeight="Medium"
                                         FontFamily="Montserrat"                            

@@ -46,22 +46,32 @@ namespace PrivacyFinalProject.View
         {
 
             // Get Credentials
+            String firstName = txtUserFirst.Text;
+            String lastName = txtUserLast.Text;
+            String password = txtPass.Password;
 
+            // Ensure fields are not empty
+            if (firstName.Length > 0 && lastName.Length > 0 && password.Length > 0)
+            {
 
-            // Validate Credentials
+                // Validate Credentials in DB
+                // if (validateCredentials(firstName, lastName, password)) { put the show chatview code here}
 
+                // Create and show the ChatView window.
+                ChatView chatView = new ChatView(firstName, lastName);
+                chatView.Show();
 
-            // Create and show the ChatView window.
-            ChatView chatView = new ChatView();
-            chatView.Show();
+                // Bring the new window to the foreground.
+                chatView.Activate();
 
-            // Bring the new window to the foreground.
-            chatView.Activate();
+                // Close the current window or hide it before showing the new window.
+                this.Close(); // Use this if you want to close the current window.
+                              // this.Hide(); // Use this if you just want to hide the current window.
+            }
+            else {
+                return;
+            }
 
-            // Close the current window or hide it before showing the new window.
-            this.Close(); // Use this if you want to close the current window.
-            // this.Hide(); // Use this if you just want to hide the current window.
-            
         }
 
         private void btnResetPassword_Click(object sender, RoutedEventArgs e)

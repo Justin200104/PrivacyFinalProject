@@ -18,12 +18,22 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Resource Include="Images\back-image.jpg" />
     <Resource Include="Images\key-icon.png" />
     <Resource Include="Images\PseudoChatLogo.png" />
     <Resource Include="Images\send-message.png" />
     <Resource Include="Images\user-first.png" />
     <Resource Include="Images\user-last.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Resources\DictionaryWords.json">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
   </ItemGroup>
 
 </Project>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration.Internal;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -47,19 +48,33 @@ namespace PrivacyFinalProject.View
         {
 
             // Get the Credentials
+            String firstName = txtUserFirst.Text;
+            String lastName = txtUserLast.Text;
+            String password = txtPass.Password;
+            String confirmPassword = txtConfirmPass.Password;
 
-            // Create the account in the database
+            // Ensure fields are not empty
+            if (firstName.Length > 0 && lastName.Length > 0 && password.Length > 0 && confirmPassword.Length > 0)
+            {
+                // Ensure passwords are equal
+                if (password == confirmPassword)
+                {
 
-            // Create and show the LoginView window.
-            LoginView loginView = new LoginView();
-            loginView.Show();
+                    // Create the account in the database
 
-            // Bring the new window to the foreground.
-            loginView.Activate();
+                    // Create and show the LoginView window.
+                    LoginView loginView = new LoginView();
+                    loginView.Show();
 
-            // Close the current window or hide it before showing the new window.
-            this.Close(); // Use this if you want to close the current window.
-            // this.Hide(); // Use this if you just want to hide the current window.
+                    // Bring the new window to the foreground.
+                    loginView.Activate();
+
+                    // Close the current window or hide it before showing the new window.
+                    this.Close(); // Use this if you want to close the current window.
+                    // this.Hide(); // Use this if you just want to hide the current window.
+
+                }
+            }
         }
 
         private void btnLogin_Click(object sender, RoutedEventArgs e)

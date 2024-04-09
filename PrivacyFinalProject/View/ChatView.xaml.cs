@@ -1,16 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
+﻿using System.Windows;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+using System.IO;
+using Newtonsoft.Json;
 
 namespace PrivacyFinalProject.View
 {
@@ -22,12 +13,80 @@ namespace PrivacyFinalProject.View
         private string[] testDummies = { "TestDummy1", "TestDummy2", "TestDummy3", "TestDummy4", "TestDummy5" };
         private Random random = new Random();
         private List<Tuple<string, string>> conversation = new List<Tuple<string, string>>();
+        private string loggedInUser;
 
-        public ChatView()
+        public ChatView(String firstName, String lastName)
         {
             InitializeComponent();
             InitializeParticipants();
             GenerateConversation();
+
+            PseudonominizeUsername(firstName[0], lastName[0]);
+
+        }
+
+        private string[] ReadDictionaryFromFile(string filePath)
+        {
+            string[] dictionary = null;
+            try
+            {
+                // Read the file
+                string jsonContent = File.ReadAllText(filePath);
+
+                // Deserialize JSON to string array
+                dictionary = JsonConvert.DeserializeObject<string[]>(jsonContent);
+            }
+            catch (Exception ex)
+            {
+                // Handle exception
+                Console.WriteLine($"Error reading dictionary file: {ex.Message}");
+            }
+            return dictionary;
+        }
+
+
+        private string GetWordStartingWith(string[] dictionary, char startChar, Random rand)
+        {
+            // Filter dictionary words starting with the given character
+            var filteredWords = dictionary.Where(word => word.StartsWith(char.ToUpper(startChar).ToString(), StringComparison.OrdinalIgnoreCase)).ToArray();
+            if (filteredWords.Length == 0)
+            {
+                // If no word starts with the given character, choose a random word
+                return dictionary[rand.Next(0, dictionary.Length)];
+            }
+            // Choose a random word from the filtered list
+            return filteredWords[rand.Next(0, filteredWords.Length)];
+        }
+
+
+        private void PseudonominizeUsername(char firstInitial, char lastInitial) {
+
+            // Seed Time
+            DateTime now = DateTime.Now;
+            int seed1 = now.Hour * 3600 + now.Minute * 60 + now.Second;
+            int seed2 = now.Millisecond;
+
+            // Shift initials by time value on Ascii table
+            char shiftedFirstInitial = (char)(((firstInitial + seed1) - 'A') % 26 + 'A');
+            char shiftedLastInitial = (char)(((lastInitial + seed2) - 'A') % 26 + 'A');
+
+            // Read dictionary from JSON file
+            string[] dictionary = ReadDictionaryFromFile("../../../Resources/DictionaryWords.json");
+
+            Random rand1 = new Random(seed1);
+            Random rand2 = new Random(seed2);
+
+            // Pick words from the shifted characters
+            string firstWord = GetWordStartingWith(dictionary, shiftedFirstInitial, rand1);
+            string lastWord = GetWordStartingWith(dictionary, shiftedLastInitial, rand2);
+
+            // Concatenate dictionary words
+            string pseudonimizedName = $"{firstWord}_{lastWord}";
+
+            // Set LoggedInUser
+            loggedInUser = pseudonimizedName;
+            // Send this participant to the server;
+
         }
 
         private void InitializeParticipants()
@@ -61,6 +120,7 @@ namespace PrivacyFinalProject.View
         private void btnLeaveChat_Click(object sender, RoutedEventArgs e)
         {
             // Log the user out
+            loggedInUser = "";
 
             // Create and show the LoginView window.
             LoginView loginView = new LoginView();
@@ -76,9 +136,16 @@ namespace PrivacyFinalProject.View
 
         private void btnSendMessage_Click(object sender, RoutedEventArgs e)
         {
-            string senderName = GetRandomTestDummy();
-            string message = GetRandomMessage();
-            AddChatMessage(senderName, message);
+
+            // Get the message
+            String message = txtMessage.Text;
+
+            // Sent the message to the server
+            AddChatMessage(loggedInUser, message);
+
+            // string senderName = GetRandomTestDummy();
+            // string message = GetRandomMessage();
+            // AddChatMessage(senderName, message);
         }
 
         private string GetRandomTestDummy()
@@ -115,6 +182,9 @@ namespace PrivacyFinalProject.View
         public void AddChatMessage(string sender, string message)
         {
             var formattedMessage = $"{sender}: {message}";
+
+            // Send the message to the server instead of adding it client-side
+
             chatMessagesListBox.Items.Add(formattedMessage);
         }
     }
