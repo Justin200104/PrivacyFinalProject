@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -19,12 +20,21 @@ namespace PrivacyFinalProject.View
     /// </summary>
     public partial class LoginView : Window
     {
-        public LoginView()
+
+		private TcpClient client;
+		public LoginView()
         {
             InitializeComponent();
-        }
+		}
 
-        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
+		private void ConnectToServer()
+		{
+			client = new TcpClient();
+			client.Connect("127.0.0.1", 5537);
+            Console.WriteLine("Connected to server");
+		}
+
+		private void Window_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (e.LeftButton==MouseButtonState.Pressed)
             {
@@ -45,10 +55,12 @@ namespace PrivacyFinalProject.View
         private void btnLogin_Click(object sender, RoutedEventArgs e)
         {
             throw new NotImplementedException();
-            
-        }
 
-        private void btnForgotPassword_Click(object sender, RoutedEventArgs e)
+            // use this to log the suer in after account auth
+			//ConnectToServer();
+		}
+
+		private void btnForgotPassword_Click(object sender, RoutedEventArgs e)
         {
             throw new NotImplementedException();
         }
