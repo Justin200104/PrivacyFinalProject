@@ -147,9 +147,9 @@ namespace PrivacyFinalProject.View
                 // Reset the text box
                 txtMessage.Text = String.Empty;
 
-                // string senderName = GetRandomTestDummy();
-                // string message = GetRandomMessage();
-                // AddChatMessage(senderName, message);
+                string senderName = GetRandomTestDummy();
+                message = GetRandomMessage();
+                AddChatMessage(senderName, message);
             }
             else { return; }
 

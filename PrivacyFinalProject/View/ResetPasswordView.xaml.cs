@@ -49,13 +49,13 @@ namespace PrivacyFinalProject.View
             String firstName = txtUserFirst.Text;
             String lastName = txtUserLast.Text;
             String password = txtPass.Password;
-            String confirmPassword = txtConfirmPass.Password;
+            String resetPassword = txtResetPass.Password;
 
             // Ensure fields are not empty
-            if (firstName.Length > 0 && lastName.Length > 0 && password.Length > 0 && confirmPassword.Length > 0)
+            if (firstName.Length > 0 && lastName.Length > 0 && password.Length > 0 && resetPassword.Length > 0)
             {
                 // Ensure passwords are equal
-                if (password == confirmPassword)
+                if (password != resetPassword)
                 {
 
                     // Reset the account password in the database
