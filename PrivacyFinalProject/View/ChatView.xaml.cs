@@ -140,12 +140,19 @@ namespace PrivacyFinalProject.View
             // Get the message
             String message = txtMessage.Text;
 
-            // Sent the message to the server
-            AddChatMessage(loggedInUser, message);
+            if (message != "")
+            {
+                // Sent the message to the server
+                AddChatMessage(loggedInUser, message);
+                // Reset the text box
+                txtMessage.Text = String.Empty;
 
-            // string senderName = GetRandomTestDummy();
-            // string message = GetRandomMessage();
-            // AddChatMessage(senderName, message);
+                // string senderName = GetRandomTestDummy();
+                // string message = GetRandomMessage();
+                // AddChatMessage(senderName, message);
+            }
+            else { return; }
+
         }
 
         private string GetRandomTestDummy()

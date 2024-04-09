@@ -60,19 +60,22 @@ namespace PrivacyFinalProject.View
                 if (password == confirmPassword)
                 {
 
-                    // Create the account in the database
+                    if (chkConsent.IsChecked ?? false)
+                    {
+                        // Create the account in the database
 
-                    // Create and show the LoginView window.
-                    LoginView loginView = new LoginView();
-                    loginView.Show();
+                        // Create and show the LoginView window.
+                        LoginView loginView = new LoginView();
+                        loginView.Show();
 
-                    // Bring the new window to the foreground.
-                    loginView.Activate();
+                        // Bring the new window to the foreground.
+                        loginView.Activate();
 
-                    // Close the current window or hide it before showing the new window.
-                    this.Close(); // Use this if you want to close the current window.
-                    // this.Hide(); // Use this if you just want to hide the current window.
+                        // Close the current window or hide it before showing the new window.
+                        this.Close(); // Use this if you want to close the current window.
+                        // this.Hide(); // Use this if you just want to hide the current window.
 
+                    }
                 }
             }
         }
