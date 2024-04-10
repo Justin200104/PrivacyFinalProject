@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
@@ -22,6 +23,8 @@ namespace PrivacyFinalProject.View
     {
 
 		private TcpClient client;
+		private NetworkStream stream;
+		private byte[] buffer = new byte[1024];
 		public LoginView()
         {
             InitializeComponent();
@@ -33,6 +36,24 @@ namespace PrivacyFinalProject.View
 			client.Connect("127.0.0.1", 5537);
             Console.WriteLine("Connected to server");
 		}
+
+		//private void RecvMsg()
+		//{
+		//	while (true)
+  //          {
+		//		int bytesRead = stream.Read(buffer, 0, buffer.Length);
+		//		if (bytesRead == 0)
+		//		{
+		//			break;
+		//		}
+
+		//		string message = Encoding.UTF8.GetString(buffer, 0, bytesRead);
+		//		Dispatcher.Invoke(() =>
+		//		{
+		//			// display to screen
+		//		});
+		//	}
+		//}
 
 		private void Window_MouseDown(object sender, MouseButtonEventArgs e)
         {
