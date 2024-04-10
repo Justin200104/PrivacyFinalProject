@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using PrivacyFinalProject.Helpers;
 
 namespace PrivacyFinalProject.View
 {
@@ -22,6 +23,7 @@ namespace PrivacyFinalProject.View
         public LoginView()
         {
             InitializeComponent();
+            DataBase.CreateDatabase();
         }
 
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)

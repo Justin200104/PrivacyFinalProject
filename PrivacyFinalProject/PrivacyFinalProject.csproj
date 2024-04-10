@@ -34,6 +34,11 @@
     <None Update="Resources\DictionaryWords.json">
       <Generator>MSBuild:Compile</Generator>
     </None>
+    <PackageReference Include="System.Data.SQLite" Version="1.0.118" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="DB\" />
   </ItemGroup>
 
 </Project>
