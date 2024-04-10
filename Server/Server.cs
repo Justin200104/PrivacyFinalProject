@@ -2,11 +2,18 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 
 namespace PrivacyFinalProject
 {
+	static class Constants
+	{
+		public const string IP = "127.0.0.1";
+		public const int Port = 5537;
+	}
+
 	public class Server
 	{
 		private TcpListener server;
@@ -63,9 +70,16 @@ namespace PrivacyFinalProject
 		/// Remove client from list of clients
 		/// </summary>
 		/// <param name="client"></param>
-		public void RemoveClient(ConnectedClient client)
+		public void RemoveClient(ConnectedClient client, string username)
 		{
+			Console.WriteLine($"{username} has disconnected");
 			clients.Remove(client);
+		}
+
+		public void BroadcastClientList()
+		{
+			string clientList = "[CLIENTLIST]" + string.Join(",", clients.Select(c => c.username));
+			BroadcastMessage(clientList, null);
 		}
 	}
 
@@ -74,7 +88,7 @@ namespace PrivacyFinalProject
 		private TcpClient client;
 		private Server server;
 		private NetworkStream stream;
-		private string username;
+		public string username;
 
 		/// <summary>
 		/// Constructor for a client
@@ -107,14 +121,16 @@ namespace PrivacyFinalProject
 				{
 					username = message;
 					Console.WriteLine($"{username} has connected to the server");
+					server.BroadcastClientList();
 				}
 				else
 				{
-					server.BroadcastMessage($"{username}: {message}", this);
+					server.BroadcastMessage($"[ {username} ]: {message}", this);
 				}
 			}
 
-			server.RemoveClient(this);
+			server.RemoveClient(this, this.username);
+			server.BroadcastClientList();
 			client.Close();
 		}
 
@@ -134,7 +150,7 @@ namespace PrivacyFinalProject
 	{
 		static void Main(string[] args)
 		{
-			Server server = new Server("127.0.0.1", 5537);
+			Server server = new Server(Constants.IP, Constants.Port);
 			server.StartServer();
 		}
 	}

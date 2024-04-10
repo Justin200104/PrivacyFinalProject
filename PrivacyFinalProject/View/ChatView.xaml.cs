@@ -3,9 +3,16 @@ using System.Windows.Input;
 using System.IO;
 using Newtonsoft.Json;
 using System.Net.Sockets;
+using System.Text;
 
 namespace PrivacyFinalProject.View
 {
+    static class Constants
+    {
+		public const string IP = "127.0.0.1";
+		public const int Port = 5537;
+	}
+
     /// <summary>
     /// Interaction logic for ChatView.xaml
     /// </summary>
@@ -14,30 +21,81 @@ namespace PrivacyFinalProject.View
         private string[] testDummies = { "TestDummy1", "TestDummy2", "TestDummy3", "TestDummy4", "TestDummy5" };
         private Random random = new Random();
         private List<Tuple<string, string>> conversation = new List<Tuple<string, string>>();
+
         private string loggedInUser;
         private TcpClient client;
         private NetworkStream stream;
         private byte[] buffer = new byte[1024];
+		private List<string> connectedClients = new List<string>();
 
-        public ChatView(String firstName, String lastName)
+		public ChatView(String firstName, String lastName)
         {
             InitializeComponent();
-            InitializeParticipants();
-            GenerateConversation();
+            //InitializeParticipants();
+            //GenerateConversation();
             ConnectToServer();
 
             PseudonominizeUsername(firstName[0], lastName[0]);
 
-        }
+			// Start receiving messages in a separate thread
+			Thread receiveThread = new Thread(new ThreadStart(RecvMsgs));
+			receiveThread.Start();
+		}
 
         private void ConnectToServer()
         {
             client = new TcpClient();
-            client.Connect("127.0.0.1", 5537);
-            Console.WriteLine("Connected to server");
+            client.Connect(Constants.IP, Constants.Port);
+			stream = client.GetStream();
+			Console.WriteLine("Connected to server");
         }
 
-        private string[] ReadDictionaryFromFile(string filePath)
+		private void RecvMsgs()
+		{
+            try
+            {
+                while (true)
+                {
+                    int bytesRead = stream.Read(buffer, 0, buffer.Length);
+                    if (bytesRead == 0)
+                    {
+                        break;
+                    }
+
+                    string message = Encoding.UTF8.GetString(buffer, 0, bytesRead);
+					if (message.StartsWith("[CLIENTLIST]"))
+					{
+						string[] clients = message.Substring(12).Split(',');
+						connectedClients.Clear();
+						connectedClients.AddRange(clients);
+						Dispatcher.Invoke(() =>
+						{
+							participantsListBox.ItemsSource = null;
+							participantsListBox.ItemsSource = connectedClients;
+						});
+					}
+                    else
+                    {
+						Dispatcher.Invoke(() =>
+						{
+							chatMessagesListBox.Items.Add(message);
+						});
+					}
+                }
+            }
+			catch (Exception ex)
+			{
+				// Handle exceptions
+				Console.WriteLine($"Error: {ex.Message}");
+			}
+			finally
+			{
+				client.Close();
+			}
+
+		}
+
+		private string[] ReadDictionaryFromFile(string filePath)
         {
             string[] dictionary = null;
             try
@@ -98,9 +156,11 @@ namespace PrivacyFinalProject.View
 
             // Set LoggedInUser
             loggedInUser = pseudonimizedName;
-            // Send this participant to the server;
-
-        }
+			// Send this participant to the server;
+			byte[] buffer = Encoding.UTF8.GetBytes(pseudonimizedName);
+			stream.Write(buffer, 0, buffer.Length);
+			stream.Flush();
+		}
 
         private void InitializeParticipants()
         {
@@ -128,16 +188,18 @@ namespace PrivacyFinalProject.View
 
         private void btnClose_Click(object sender, RoutedEventArgs e)
         {
-            Application.Current.Shutdown();
+			stream.Close();
+			Application.Current.Shutdown();
         }
 
         private void btnLeaveChat_Click(object sender, RoutedEventArgs e)
         {
             // Log the user out
             loggedInUser = "";
+			stream.Close();
 
-            // Create and show the LoginView window.
-            LoginView loginView = new LoginView();
+			// Create and show the LoginView window.
+			LoginView loginView = new LoginView();
             loginView.Show();
 
             // Bring the new window to the foreground.
@@ -161,9 +223,9 @@ namespace PrivacyFinalProject.View
                 // Reset the text box
                 txtMessage.Text = String.Empty;
 
-                string senderName = GetRandomTestDummy();
-                message = GetRandomMessage();
-                AddChatMessage(senderName, message);
+                //string senderName = GetRandomTestDummy();
+                //message = GetRandomMessage();
+                //AddChatMessage(senderName, message);
             }
             else { return; }
 
@@ -202,11 +264,16 @@ namespace PrivacyFinalProject.View
 
         public void AddChatMessage(string sender, string message)
         {
-            var formattedMessage = $"{sender}: {message}";
+            var formattedMessage = $"[ {sender} ]: {message}";
 
-            // Send the message to the server instead of adding it client-side
+			// Send the message to the server instead of adding it client-side
+			byte[] buffer = Encoding.UTF8.GetBytes(message);
+			stream.Write(buffer, 0, buffer.Length);
+			stream.Flush();
 
-            chatMessagesListBox.Items.Add(formattedMessage);
+			txtMessage.Text = "";
+
+			chatMessagesListBox.Items.Add(formattedMessage);
         }
     }
 }
