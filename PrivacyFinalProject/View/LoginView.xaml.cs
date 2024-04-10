@@ -57,20 +57,28 @@ namespace PrivacyFinalProject.View
             {
 
                 // Validate Credentials in DB
-                // if (validateCredentials(firstName, lastName, password)) { put the show chatview code here}
 
-                // Create and show the ChatView window.
-                ChatView chatView = new ChatView(firstName, lastName);
-                chatView.Show();
+                if (DataBase.CheckPassword(firstName, lastName, password)) {
 
-                // Bring the new window to the foreground.
-                chatView.Activate();
+                    // Create and show the ChatView window.
+                    ChatView chatView = new ChatView(firstName, lastName);
+                    chatView.Show();
 
-                // Close the current window or hide it before showing the new window.
-                this.Close(); // Use this if you want to close the current window.
-                              // this.Hide(); // Use this if you just want to hide the current window.
+                    // Bring the new window to the foreground.
+                    chatView.Activate();
+
+                    // Close the current window or hide it before showing the new window.
+                    this.Close(); // Use this if you want to close the current window.
+                                  // this.Hide(); // Use this if you just want to hide the current window.
+                }
+                else
+                {
+                    return;
+                }
+
             }
-            else {
+            else 
+            {
                 return;
             }
 

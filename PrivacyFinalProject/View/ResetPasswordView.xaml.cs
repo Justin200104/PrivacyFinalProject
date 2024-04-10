@@ -1,17 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
+﻿using System.Windows;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+using PrivacyFinalProject.Helpers;
 
 namespace PrivacyFinalProject.View
 {
@@ -59,17 +48,19 @@ namespace PrivacyFinalProject.View
                 {
 
                     // Reset the account password in the database
+                    if (DataBase.ResetPassword(firstName, lastName, password, resetPassword)) {
+                        // Create and show the LoginView window.
+                        LoginView loginView = new LoginView();
+                        loginView.Show();
 
-                    // Create and show the LoginView window.
-                    LoginView loginView = new LoginView();
-                    loginView.Show();
+                        // Bring the new window to the foreground.
+                        loginView.Activate();
 
-                    // Bring the new window to the foreground.
-                    loginView.Activate();
-
-                    // Close the current window or hide it before showing the new window.
-                    this.Close(); // Use this if you want to close the current window.
-                    // this.Hide(); // Use this if you just want to hide the current window.
+                        // Close the current window or hide it before showing the new window.
+                        this.Close(); // Use this if you want to close the current window.
+                                      // this.Hide(); // Use this if you just want to hide the current window.
+                    }
+                    else { return; }
 
                 }
             }
