@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.NetworkInformation;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -12,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using PrivacyFinalProject.Helpers;
+using System.Net.Sockets;
 
 namespace PrivacyFinalProject.View
 {
@@ -20,13 +23,17 @@ namespace PrivacyFinalProject.View
     /// </summary>
     public partial class LoginView : Window
     {
+
         public LoginView()
         {
+
             InitializeComponent();
             DataBase.CreateDatabase();
+
         }
 
-        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
+
+    private void Window_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (e.LeftButton == MouseButtonState.Pressed)
             {

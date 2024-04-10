@@ -2,6 +2,7 @@
 using System.Windows.Input;
 using System.IO;
 using Newtonsoft.Json;
+using System.Net.Sockets;
 
 namespace PrivacyFinalProject.View
 {
@@ -14,15 +15,26 @@ namespace PrivacyFinalProject.View
         private Random random = new Random();
         private List<Tuple<string, string>> conversation = new List<Tuple<string, string>>();
         private string loggedInUser;
+        private TcpClient client;
+        private NetworkStream stream;
+        private byte[] buffer = new byte[1024];
 
         public ChatView(String firstName, String lastName)
         {
             InitializeComponent();
             InitializeParticipants();
             GenerateConversation();
+            ConnectToServer();
 
             PseudonominizeUsername(firstName[0], lastName[0]);
 
+        }
+
+        private void ConnectToServer()
+        {
+            client = new TcpClient();
+            client.Connect("127.0.0.1", 5537);
+            Console.WriteLine("Connected to server");
         }
 
         private string[] ReadDictionaryFromFile(string filePath)
