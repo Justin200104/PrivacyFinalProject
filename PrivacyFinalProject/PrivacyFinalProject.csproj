@@ -2,31 +2,43 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net8.0-windows</TargetFramework>
+    <TargetFramework>net7.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.Data.SQLite" Version="1.0.118" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="DB\" />
     <None Remove="Images\back-image.jpg" />
     <None Remove="Images\key-icon.png" />
     <None Remove="Images\PseudoChatLogo.png" />
+    <None Remove="Images\send-message.png" />
     <None Remove="Images\user-first.png" />
     <None Remove="Images\user-last.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 
   <ItemGroup>
     <Resource Include="Images\back-image.jpg" />
     <Resource Include="Images\key-icon.png" />
     <Resource Include="Images\PseudoChatLogo.png" />
+    <Resource Include="Images\send-message.png" />
     <Resource Include="Images\user-first.png" />
     <Resource Include="Images\user-last.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Resources\DictionaryWords.json">
+      <Generator>MSBuild:Compile</Generator>
+    </None>
+    <PackageReference Include="System.Data.SQLite" Version="1.0.118" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="DB\" />
   </ItemGroup>
 
 </Project>
