@@ -28,7 +28,7 @@ namespace PrivacyFinalProject.View
 
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (e.LeftButton==MouseButtonState.Pressed)
+            if (e.LeftButton == MouseButtonState.Pressed)
             {
                 DragMove();
             }
@@ -58,7 +58,8 @@ namespace PrivacyFinalProject.View
 
                 // Validate Credentials in DB
 
-                if (DataBase.CheckPassword(firstName, lastName, password)) {
+                if (DataBase.CheckPassword(firstName, lastName, password))
+                {
 
                     // Create and show the ChatView window.
                     ChatView chatView = new ChatView(firstName, lastName);
@@ -77,7 +78,7 @@ namespace PrivacyFinalProject.View
                 }
 
             }
-            else 
+            else
             {
                 return;
             }

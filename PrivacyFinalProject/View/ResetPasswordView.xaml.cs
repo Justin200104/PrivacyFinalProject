@@ -48,7 +48,8 @@ namespace PrivacyFinalProject.View
                 {
 
                     // Reset the account password in the database
-                    if (DataBase.ResetPassword(firstName, lastName, password, resetPassword)) {
+                    if (DataBase.ResetPassword(firstName, lastName, password, resetPassword))
+                    {
                         // Create and show the LoginView window.
                         LoginView loginView = new LoginView();
                         loginView.Show();
@@ -81,4 +82,3 @@ namespace PrivacyFinalProject.View
         }
     }
 }
-

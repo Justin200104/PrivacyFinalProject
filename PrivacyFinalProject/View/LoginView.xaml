@@ -12,9 +12,9 @@
         Background="Transparent"
         AllowsTransparency="True"
         MouseDown="Window_MouseDown">
-    
-    
 
+
+     
     <Border CornerRadius="50"
             Opacity="0.90">
         <Border.Background>
@@ -29,7 +29,7 @@
         <Border CornerRadius="20"
                 BorderThickness="2"
                 Opacity="0.85">
-        
+
             <Border.BorderBrush>
                 <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
                     <GradientStop Color="#FF1F1167" Offset="0"/>
@@ -300,7 +300,7 @@
                                 Cursor="Hand"                           
                                 Margin="8,0,0,0"
                                 Padding="0,0,0,5"
-                                Click="btnCreateAccount_Click">     
+                                Click="btnCreateAccount_Click">
                             <Button.Style>
                                 <Style TargetType="Button">
                                     <Setter Property="Background" Value="Transparent" />
@@ -345,13 +345,13 @@
                         </Button>
 
                     </StackPanel>
-                    
+
                 </StackPanel>
 
             </Grid>
 
         </Border>
-        
+
     </Border>
 
 </Window>

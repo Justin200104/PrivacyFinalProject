@@ -13,12 +13,12 @@
 		AllowsTransparency="True"
 		MouseDown="Window_MouseDown">
 
-	<Border CornerRadius="50"
+    <Border CornerRadius="50"
 			Opacity="0.90">
-		<Border.Background>
-			<ImageBrush ImageSource="/Images/back-image.jpg"
+        <Border.Background>
+            <ImageBrush ImageSource="/Images/back-image.jpg"
 						Stretch="UniformToFill" />
-		</Border.Background>
+        </Border.Background>
 
         <Border.Effect>
             <DropShadowEffect BlurRadius="2" ShadowDepth="0.5" />
@@ -28,38 +28,38 @@
 				BorderThickness="2"
 				Opacity="0.85">
 
-			<Border.BorderBrush>
-				<LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-					<GradientStop Color="#FF1F1167" Offset="0"/>
-					<GradientStop Color="#F29473" Offset="0.75"/>
-					<GradientStop Color="#FF1F1167" Offset="1"/>
-				</LinearGradientBrush>
-			</Border.BorderBrush>
+            <Border.BorderBrush>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                    <GradientStop Color="#FF1F1167" Offset="0"/>
+                    <GradientStop Color="#F29473" Offset="0.75"/>
+                    <GradientStop Color="#FF1F1167" Offset="1"/>
+                </LinearGradientBrush>
+            </Border.BorderBrush>
 
-			<Border.Background>
-				<LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-					<GradientStop Color="#060531" Offset="0"/>
-					<GradientStop Color="#1b1448" Offset="0.75"/>
-				</LinearGradientBrush>
-			</Border.Background>
+            <Border.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                    <GradientStop Color="#060531" Offset="0"/>
+                    <GradientStop Color="#1b1448" Offset="0.75"/>
+                </LinearGradientBrush>
+            </Border.Background>
 
 
-			<Grid>
-				<Grid.RowDefinitions>
-					<RowDefinition Height="30" />
-					<RowDefinition/>
-				</Grid.RowDefinitions>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30" />
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
 
-				<Grid Grid.Row="0">
+                <Grid Grid.Row="0">
 
-					<Grid.ColumnDefinitions>
-						<ColumnDefinition/>
-						<ColumnDefinition Width="25"/>
-						<ColumnDefinition Width="25"/>
-						<ColumnDefinition Width="5"/>
-					</Grid.ColumnDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="25"/>
+                        <ColumnDefinition Width="25"/>
+                        <ColumnDefinition Width="5"/>
+                    </Grid.ColumnDefinitions>
 
-					<Button x:Name="btnMinimize"
+                    <Button x:Name="btnMinimize"
 							BorderThickness="0"
 							Content="-"
 							Foreground="White"
@@ -69,31 +69,31 @@
 							Grid.Column="1"
 							Click="btnMinimize_Click">
 
-						<Button.Style>
-							<Style TargetType="Button">
-								<Setter Property="Background" Value="#28AEED"/>
-								<Style.Triggers>
-									<Trigger Property="IsMouseOver" Value="True">
-										<Setter Property="Background" Value="#278BEF"/>
-									</Trigger>
-								</Style.Triggers>
-							</Style>
-						</Button.Style>
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="#28AEED"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#278BEF"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
 
-						<Button.Template>
-							<ControlTemplate TargetType="Button">
-								<Border Width="18" Height="18"
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border Width="18" Height="18"
 										CornerRadius="9"
 										Background="{TemplateBinding Background}">
 
-									<ContentPresenter VerticalAlignment="Center"
+                                    <ContentPresenter VerticalAlignment="Center"
 													  HorizontalAlignment="Center"/>
-								</Border>
-							</ControlTemplate>
-						</Button.Template>
-					</Button>
+                                </Border>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
 
-					<Button x:Name="btnClose"
+                    <Button x:Name="btnClose"
 							BorderThickness="0"
 							Content="X"
 							Foreground="White"
@@ -103,46 +103,46 @@
 							Grid.Column="2"
 							Click="btnClose_Click">
 
-						<Button.Style>
-							<Style TargetType="Button">
-								<Setter Property="Background" Value="#FFBE5936"/>
-								<Style.Triggers>
-									<Trigger Property="IsMouseOver" Value="True">
-										<Setter Property="Background" Value="#FF963F20"/>
-									</Trigger>
-								</Style.Triggers>
-							</Style>
-						</Button.Style>
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="#FFBE5936"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#FF963F20"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
 
-						<Button.Template>
-							<ControlTemplate TargetType="Button">
-								<Border Width="18" Height="18"
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border Width="18" Height="18"
 										CornerRadius="9"
 										Background="{TemplateBinding Background}">
-									<ContentPresenter VerticalAlignment="Center"
+                                    <ContentPresenter VerticalAlignment="Center"
 													  HorizontalAlignment="Center"/>
-								</Border>
-							</ControlTemplate>
-						</Button.Template>
-					</Button>
-				</Grid>
+                                </Border>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+                </Grid>
 
-				<StackPanel Width="220"
+                <StackPanel Width="220"
 							Grid.Row="1"
 							Orientation="Vertical"
 							Margin="0,35,0,0">
 
-					<Image Source="/Images/PseudoChatLogo.png"
+                    <Image Source="/Images/PseudoChatLogo.png"
 						   Width="100" Height="100"/>
 
-					<TextBlock Text="PseudoChat"
+                    <TextBlock Text="PseudoChat"
 							   Foreground="White"
 							   FontSize="25"
 							   FontWeight="Medium"
 							   FontFamily="Montserrat"
 							   HorizontalAlignment="Center"/>
 
-					<TextBlock Text="New Account"
+                    <TextBlock Text="New Account"
 							   Foreground="White"
 							   FontSize="14"
 							   FontWeight="Medium"
@@ -169,21 +169,21 @@
 									Height="28"
 									VerticalContentAlignment="Center"
 									Margin="0,5,0,0"
-									Padding="30,0,0,0">			
+									Padding="30,0,0,0">
 
                         <TextBox.Background>
-							<ImageBrush ImageSource="/Images/user-first.png" Stretch="Uniform" AlignmentX="Left">
-								<ImageBrush.Transform>
-									<TransformGroup>
-										<ScaleTransform/>
-										<SkewTransform/>
-										<RotateTransform/>
-										<TranslateTransform X="-1"/>
-									</TransformGroup>
-								</ImageBrush.Transform>
-							</ImageBrush>
-						</TextBox.Background>
-					</TextBox>
+                            <ImageBrush ImageSource="/Images/user-first.png" Stretch="Uniform" AlignmentX="Left">
+                                <ImageBrush.Transform>
+                                    <TransformGroup>
+                                        <ScaleTransform/>
+                                        <SkewTransform/>
+                                        <RotateTransform/>
+                                        <TranslateTransform X="-1"/>
+                                    </TransformGroup>
+                                </ImageBrush.Transform>
+                            </ImageBrush>
+                        </TextBox.Background>
+                    </TextBox>
 
                     <TextBlock Text="Last Name"
 								Foreground="White"
@@ -226,7 +226,7 @@
 							   FontFamily="Montserrat"                             
 							   Margin="0,15,0,0"/>
 
-					<PasswordBox x:Name="txtPass"
+                    <PasswordBox x:Name="txtPass"
 								 FontSize="13"
 								 FontWeight="Medium"
 								 FontFamily="Montserrat"                            
@@ -239,19 +239,19 @@
 								 Margin="0,5,0,0"
 								 Padding="30,0,0,0">
 
-						<PasswordBox.Background>
-							<ImageBrush ImageSource="/Images/key-icon.png" Stretch="Uniform" AlignmentX="Left">
-								<ImageBrush.Transform>
-									<TransformGroup>
-										<ScaleTransform/>
-										<SkewTransform/>
-										<RotateTransform/>
-										<TranslateTransform X="-1"/>
-									</TransformGroup>
-								</ImageBrush.Transform>
-							</ImageBrush>
-						</PasswordBox.Background>
-					</PasswordBox>
+                        <PasswordBox.Background>
+                            <ImageBrush ImageSource="/Images/key-icon.png" Stretch="Uniform" AlignmentX="Left">
+                                <ImageBrush.Transform>
+                                    <TransformGroup>
+                                        <ScaleTransform/>
+                                        <SkewTransform/>
+                                        <RotateTransform/>
+                                        <TranslateTransform X="-1"/>
+                                    </TransformGroup>
+                                </ImageBrush.Transform>
+                            </ImageBrush>
+                        </PasswordBox.Background>
+                    </PasswordBox>
 
                     <TextBlock Text="Confirm Password"
 					   Foreground="White"
@@ -286,15 +286,15 @@
                             </ImageBrush>
                         </PasswordBox.Background>
                     </PasswordBox>
-                    
+
                     <!-- Add a checkbox for consent -->
                     <CheckBox x:Name="chkConsent"
 							  Foreground="White"
 							  FontSize="12"
 							  FontWeight="Medium"
 							  FontFamily="Montserrat"
-							  Margin="0,20,0,0">	
-						<TextBlock>	
+							  Margin="0,20,0,0">
+                        <TextBlock>	
 							<Run Text="I agree to the "/>
 							<Hyperlink Click="btnPrivacyPolicy_Click">
 							<Run Text="Privacy Policy"/>
@@ -312,33 +312,33 @@
 							Cursor="Hand"                           
 							Margin="0,20,0,0"
 							Click="btnCreateAccount_Click">
-						<Button.Style>
-							<Style TargetType="Button">
-								<Setter Property="Background" Value="#462AD8"/>
-								<Style.Triggers>
-									<Trigger Property="IsMouseOver" Value="True">
-										<Setter Property="Background" Value="#28AEED"/>
-									</Trigger>
-								</Style.Triggers>
-							</Style>
-						</Button.Style>
-						<Button.Template>
-							<ControlTemplate TargetType="Button">
-								<Border Width="150" Height="40"
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="#462AD8"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#28AEED"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border Width="150" Height="40"
 										CornerRadius="20"
 										Background="{TemplateBinding Background}">
-									<ContentPresenter VerticalAlignment="Center"
+                                    <ContentPresenter VerticalAlignment="Center"
 													  HorizontalAlignment="Center"/>
-								</Border>
-							</ControlTemplate>
-						</Button.Template>
-					</Button>
+                                </Border>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
 
-					<StackPanel Orientation="Horizontal"
+                    <StackPanel Orientation="Horizontal"
 								HorizontalAlignment="Center"
 								Margin="0,15,0,0">
 
-						<Button x:Name="btnLogin"  
+                        <Button x:Name="btnLogin"  
 								BorderThickness="0"
 								Content="Log In"
 								Background="Transparent"
@@ -349,30 +349,30 @@
 								Margin="0,0,0,0"
 								Padding="0,0,0,5"
 								Click="btnLogin_Click">
-							<Button.Style>
-								<Style TargetType="Button">
-									<Setter Property="Background" Value="Transparent" />
-									<Setter Property="Template">
-										<Setter.Value>
-											<ControlTemplate TargetType="Button">
-												<Grid Background="{TemplateBinding Background}">
-													<ContentPresenter />
-												</Grid>
-											</ControlTemplate>
-										</Setter.Value>
-									</Setter>
-								</Style>
-							</Button.Style>
-						</Button>
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Background" Value="Transparent" />
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="Button">
+                                                <Grid Background="{TemplateBinding Background}">
+                                                    <ContentPresenter />
+                                                </Grid>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </Button.Style>
+                        </Button>
 
-					</StackPanel>
+                    </StackPanel>
 
-				</StackPanel>
+                </StackPanel>
 
-			</Grid>
+            </Grid>
 
-		</Border>
+        </Border>
 
-	</Border>
+    </Border>
 
 </Window>

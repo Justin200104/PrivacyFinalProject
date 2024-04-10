@@ -59,7 +59,8 @@ namespace PrivacyFinalProject.View
         }
 
 
-        private void PseudonominizeUsername(char firstInitial, char lastInitial) {
+        private void PseudonominizeUsername(char firstInitial, char lastInitial)
+        {
 
             // Seed Time
             DateTime now = DateTime.Now;
@@ -91,7 +92,8 @@ namespace PrivacyFinalProject.View
 
         private void InitializeParticipants()
         {
-            for (int i = 0; i < 10; i++) {
+            for (int i = 0; i < 10; i++)
+            {
                 foreach (string dummy in testDummies)
                 {
                     participantsListBox.Items.Add(dummy);
