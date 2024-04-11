@@ -11,10 +11,9 @@ namespace PrivacyFinalProject.View
     /// </summary>
     public partial class CreateAccountView : Window
     {
-        ServerFunctions SF;
-		public CreateAccountView(ref ServerFunctions s)
+		ServerFunctions SF = new ServerFunctions();
+		public CreateAccountView()
         {
-            SF = s;
             InitializeComponent();
         }
 
@@ -33,7 +32,6 @@ namespace PrivacyFinalProject.View
 
         private void btnClose_Click(object sender, RoutedEventArgs e)
         {
-            SF.client.Close();
             Application.Current.Shutdown();
         }
 
@@ -55,18 +53,21 @@ namespace PrivacyFinalProject.View
 
                     if (chkConsent.IsChecked ?? false)
                     {
+                        SF.ConnectToServer();
+
 						//send account to server
 						byte[] buffer = Encoding.UTF8.GetBytes($"[CREATEACCOUNT]{firstName},{lastName},{password}");
 						SF.stream.Write(buffer, 0, buffer.Length);
 						SF.stream.Flush();
 
 						// Create and show the LoginView window.
-						LoginView loginView = new LoginView(ref SF);
+						LoginView loginView = new LoginView();
                         loginView.Show();
 
                         // Bring the new window to the foreground.
                         loginView.Activate();
 
+                        SF.client.Close();
                         // Close the current window or hide it before showing the new window.
                         this.Close(); // Use this if you want to close the current window.
                         // this.Hide(); // Use this if you just want to hide the current window.
@@ -79,7 +80,7 @@ namespace PrivacyFinalProject.View
         private void btnLogin_Click(object sender, RoutedEventArgs e)
         {
             // Create and show the LoginView window.
-            LoginView loginView = new LoginView(ref SF);
+            LoginView loginView = new LoginView();
             loginView.Show();
 
             // Bring the new window to the foreground.

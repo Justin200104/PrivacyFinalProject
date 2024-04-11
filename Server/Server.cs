@@ -35,14 +35,14 @@ namespace PrivacyFinalProject
 		public void StartServer()
 		{
 			server.Start();
-			Console.WriteLine("Starting Server");
+			Console.WriteLine($"[{GetTime()}] Starting Server");
 
 			DataBase.CreateDatabase();
 
 			while (true)
 			{
 				TcpClient client = server.AcceptTcpClient();
-				Console.WriteLine("Client connected");
+				//Console.WriteLine("Client connected");
 
 				ConnectedClient connectedClient = new ConnectedClient(client, this);
 				clients.Add(connectedClient);
@@ -74,7 +74,9 @@ namespace PrivacyFinalProject
 		/// <param name="client"></param>
 		public void RemoveClient(ConnectedClient client, string username)
 		{
-			Console.WriteLine($"{username} has disconnected");
+			if(username != null)
+				Console.WriteLine($"[{GetTime()}] {username} has disconnected");
+
 			clients.Remove(client);
 		}
 
@@ -84,6 +86,11 @@ namespace PrivacyFinalProject
 			BroadcastMessage(clientList, null);
 		}
 
+		public String GetTime()
+		{
+			String currentTime = DateTime.Now.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss");
+			return currentTime;
+		}
 	}
 
 	public class ConnectedClient
@@ -135,11 +142,15 @@ namespace PrivacyFinalProject
 					await stream.WriteAsync(loginbuf, 0, loginbuf.Length);
 					await stream.FlushAsync();
 
+					if(success)
+						Console.WriteLine($"[{server.GetTime()}] Login successful");
+					else
+						Console.WriteLine($"[{server.GetTime()}] Login failed");
 				}
 				else if(message.StartsWith("[LOGINSUCCESS]"))
 				{
 					username = message.Substring(14);
-					Console.WriteLine($"{username} has connected to the server");
+					Console.WriteLine($"[{server.GetTime()}] {username} has connected to the server");
 					server.BroadcastClientList();
 				}
 				else if(message.StartsWith("[CREATEACCOUNT]"))
@@ -151,15 +162,31 @@ namespace PrivacyFinalProject
 					String password = create[2];
 
 					DataBase.InsertData(firstName, lastName, password);
-					Console.WriteLine("Create account success");
+					Console.WriteLine($"[{server.GetTime()}] Create account success");
 				}
 				else if (message.StartsWith("[RESETPASSWORD]"))
 				{
-					Console.WriteLine("[RESETPASSWORD] hit");
+					String[] create = message.Substring(15).Split(',');
+
+					String firstName = create[0];
+					String lastName = create[1];
+					String password = create[2];
+					String resetpass = create[3];
+
+					bool success = DataBase.ResetPassword(firstName, lastName, password, resetpass);
+					String res = success.ToString();
+					byte[] resetbuf = Encoding.UTF8.GetBytes(res);
+					await stream.WriteAsync(resetbuf, 0, resetbuf.Length);
+					await stream.FlushAsync();
+
+					if(success)
+						Console.WriteLine($"[{server.GetTime()}] Password reset success");
+					else
+						Console.WriteLine($"[{server.GetTime()}] Password reset unsuccessful");
 				}
 				else
 				{
-					server.BroadcastMessage($"[ {username} ]: {message}", this);
+					server.BroadcastMessage($"[{server.GetTime()}] [ {username} ]: {message}", this);
 				}
 				await stream.FlushAsync();
 			}

@@ -26,5 +26,10 @@ namespace PrivacyFinalProject.Helpers
 			stream = client.GetStream();
 			Console.WriteLine("Connected to server");
 		}
+		public String GetTime()
+		{
+			String currentTime = DateTime.Now.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss");
+			return currentTime;
+		}
 	}
 }

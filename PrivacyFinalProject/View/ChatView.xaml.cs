@@ -191,10 +191,6 @@ namespace PrivacyFinalProject.View
                 AddChatMessage(loggedInUser, message);
                 // Reset the text box
                 txtMessage.Text = String.Empty;
-
-                //string senderName = GetRandomTestDummy();
-                //message = GetRandomMessage();
-                //AddChatMessage(senderName, message);
             }
             else { return; }
 
@@ -202,7 +198,7 @@ namespace PrivacyFinalProject.View
 
         public void AddChatMessage(string sender, string message)
         {
-            var formattedMessage = $"[ {sender} ]: {message}";
+            var formattedMessage = $"[{SF.GetTime()}] [ {sender} ]: {message}";
 
 			// Send the message to the server instead of adding it client-side
 			byte[] buffer = Encoding.UTF8.GetBytes(message);

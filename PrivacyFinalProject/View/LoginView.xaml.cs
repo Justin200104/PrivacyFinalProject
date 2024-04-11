@@ -14,15 +14,6 @@ namespace PrivacyFinalProject.View
 		ServerFunctions s = new ServerFunctions();
 		public LoginView()
         {
-			s.ConnectToServer();
-
-			InitializeComponent();
-		}
-
-		public LoginView(ref ServerFunctions SF)
-		{
-            s = SF;
-
 			InitializeComponent();
 		}
 
@@ -41,22 +32,20 @@ namespace PrivacyFinalProject.View
 
         private void btnClose_Click(object sender, RoutedEventArgs e)
         {
-			s.client.Close();
 			Application.Current.Shutdown();
         }
 
         private async void btnLogin_Click(object sender, RoutedEventArgs e)
         {
-
-            // Get Credentials
-            String firstName = txtUserFirst.Text;
+			// Get Credentials
+			String firstName = txtUserFirst.Text;
             String lastName = txtUserLast.Text;
             String password = txtPass.Password;
 
             // Ensure fields are not empty
             if (firstName.Length > 0 && lastName.Length > 0 && password.Length > 0)
             {
-
+				s.ConnectToServer();
 				// Validate Credentials in DB
 				byte[] buffer = Encoding.UTF8.GetBytes($"[LOGIN]{firstName},{lastName},{password}");
 				s.stream.Write(buffer, 0, buffer.Length);
@@ -79,6 +68,7 @@ namespace PrivacyFinalProject.View
                 }
 				else
 				{
+                    s.client.Close();
                     return;
 				}
 			}
@@ -92,7 +82,7 @@ namespace PrivacyFinalProject.View
         private void btnResetPassword_Click(object sender, RoutedEventArgs e)
         {
             // Create and show the ResetPasswordView window.
-            ResetPasswordView resetPasswordView = new ResetPasswordView(ref s);
+            ResetPasswordView resetPasswordView = new ResetPasswordView();
             resetPasswordView.Show();
 
             // Bring the new window to the foreground.
@@ -106,7 +96,7 @@ namespace PrivacyFinalProject.View
         private void btnCreateAccount_Click(object sender, RoutedEventArgs e)
         {
             // Create and show the CreateAccountView window.
-            CreateAccountView createAccountView = new CreateAccountView(ref s);
+            CreateAccountView createAccountView = new CreateAccountView();
             createAccountView.Show();
 
             // Bring the new window to the foreground.
