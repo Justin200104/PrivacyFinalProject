@@ -4,85 +4,66 @@ using System.IO;
 using Newtonsoft.Json;
 using System.Net.Sockets;
 using System.Text;
+using PrivacyFinalProject.Helpers;
+using System;
+using System.Net.Security;
 
 namespace PrivacyFinalProject.View
 {
-    static class Constants
-    {
-		public const string IP = "127.0.0.1";
-		public const int Port = 5537;
-	}
-
     /// <summary>
     /// Interaction logic for ChatView.xaml
     /// </summary>
     public partial class ChatView : Window
     {
-        private string[] testDummies = { "TestDummy1", "TestDummy2", "TestDummy3", "TestDummy4", "TestDummy5" };
-        private Random random = new Random();
-        private List<Tuple<string, string>> conversation = new List<Tuple<string, string>>();
-
-        private string loggedInUser;
-        private TcpClient client;
-        private NetworkStream stream;
-        private byte[] buffer = new byte[1024];
-		private List<string> connectedClients = new List<string>();
-
-		public ChatView(String firstName, String lastName)
+        ServerFunctions SF;
+		private string loggedInUser;
+       
+		public ChatView(String firstName, String lastName, ref ServerFunctions s)
         {
-            InitializeComponent();
-            //InitializeParticipants();
-            //GenerateConversation();
-            ConnectToServer();
-
-            PseudonominizeUsername(firstName[0], lastName[0]);
-
+			SF = s;
 			// Start receiving messages in a separate thread
 			Thread receiveThread = new Thread(new ThreadStart(RecvMsgs));
 			receiveThread.Start();
+
+			PseudonominizeUsername(firstName[0], lastName[0]);
+			
+			InitializeComponent();
 		}
 
-        private void ConnectToServer()
-        {
-            client = new TcpClient();
-            client.Connect(Constants.IP, Constants.Port);
-			stream = client.GetStream();
-			Console.WriteLine("Connected to server");
-        }
-
-		private void RecvMsgs()
+		async public void RecvMsgs()
 		{
-            try
-            {
-                while (true)
+			try
+			{
+				while (true)
                 {
-                    int bytesRead = stream.Read(buffer, 0, buffer.Length);
-                    if (bytesRead == 0)
+                    byte[] buffer = new byte[1024];
+					int bytesRead = await SF.stream.ReadAsync(buffer, 0, buffer.Length);
+					if (bytesRead == 0)
                     {
                         break;
                     }
 
-                    string message = Encoding.UTF8.GetString(buffer, 0, bytesRead);
+					string message = Encoding.UTF8.GetString(buffer, 0, bytesRead);
 					if (message.StartsWith("[CLIENTLIST]"))
 					{
 						string[] clients = message.Substring(12).Split(',');
-						connectedClients.Clear();
-						connectedClients.AddRange(clients);
+						SF.connectedClients.Clear();
+						SF.connectedClients.AddRange(clients);
 						Dispatcher.Invoke(() =>
 						{
 							participantsListBox.ItemsSource = null;
-							participantsListBox.ItemsSource = connectedClients;
+							participantsListBox.ItemsSource = SF.connectedClients;
 						});
 					}
-                    else
-                    {
+					else
+					{
 						Dispatcher.Invoke(() =>
 						{
 							chatMessagesListBox.Items.Add(message);
 						});
 					}
-                }
-            }
+				}
+			}
 			catch (Exception ex)
 			{
 				// Handle exceptions
@@ -90,11 +71,10 @@ namespace PrivacyFinalProject.View
 			}
 			finally
 			{
-				client.Close();
+				SF.client.Close();
 			}
 
 		}
-
 		private string[] ReadDictionaryFromFile(string filePath)
         {
             string[] dictionary = null;
@@ -129,7 +109,7 @@ namespace PrivacyFinalProject.View
         }
 
 
-        private void PseudonominizeUsername(char firstInitial, char lastInitial)
+        async private void PseudonominizeUsername(char firstInitial, char lastInitial)
         {
 
             // Seed Time
@@ -157,21 +137,10 @@ namespace PrivacyFinalProject.View
             // Set LoggedInUser
             loggedInUser = pseudonimizedName;
 			// Send this participant to the server;
-			byte[] buffer = Encoding.UTF8.GetBytes(pseudonimizedName);
-			stream.Write(buffer, 0, buffer.Length);
-			stream.Flush();
+			byte[] buffer = Encoding.UTF8.GetBytes($"[LOGINSUCCESS]{pseudonimizedName}");
+			await SF.stream.WriteAsync(buffer, 0, buffer.Length);
+			await SF.stream.FlushAsync();
 		}
-
-        private void InitializeParticipants()
-        {
-            for (int i = 0; i < 10; i++)
-            {
-                foreach (string dummy in testDummies)
-                {
-                    participantsListBox.Items.Add(dummy);
-                }
-            }
-        }
 
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -188,7 +157,7 @@ namespace PrivacyFinalProject.View
 
         private void btnClose_Click(object sender, RoutedEventArgs e)
         {
-			stream.Close();
+			SF.stream.Close();
 			Application.Current.Shutdown();
         }
 
@@ -196,7 +165,7 @@ namespace PrivacyFinalProject.View
         {
             // Log the user out
             loggedInUser = "";
-			stream.Close();
+			SF.stream.Close();
 
 			// Create and show the LoginView window.
 			LoginView loginView = new LoginView();
@@ -231,45 +200,14 @@ namespace PrivacyFinalProject.View
 
         }
 
-        private string GetRandomTestDummy()
-        {
-            return testDummies[random.Next(testDummies.Length)];
-        }
-
-        private void GenerateConversation()
-        {
-            // Generate a dynamic conversation between random test dummies
-            for (int i = 0; i < 10; i++)
-            {
-                string sender = GetRandomTestDummy();
-                string message = GetRandomMessage();
-                conversation.Add(new Tuple<string, string>(sender, message));
-            }
-        }
-
-        private string GetRandomMessage()
-        {
-            string[] chatMessages = {
-                "Hey, how's it going?",
-                "Not bad, just busy with work. You?",
-                "Same here. It never ends!",
-                "Tell me about it. We should grab coffee sometime.",
-                "That sounds like a plan. Let's do it next week?",
-                "Sure, I'll ping you when I'm free.",
-                "Great! Looking forward to it."
-            };
-
-            return chatMessages[random.Next(chatMessages.Length)];
-        }
-
         public void AddChatMessage(string sender, string message)
         {
             var formattedMessage = $"[ {sender} ]: {message}";
 
 			// Send the message to the server instead of adding it client-side
 			byte[] buffer = Encoding.UTF8.GetBytes(message);
-			stream.Write(buffer, 0, buffer.Length);
-			stream.Flush();
+			SF.stream.Write(buffer, 0, buffer.Length);
+			SF.stream.Flush();
 
 			txtMessage.Text = "";
 

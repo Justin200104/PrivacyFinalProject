@@ -1,20 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.NetworkInformation;
-using System.Net.Sockets;
+﻿using PrivacyFinalProject.Helpers;
+using System.IO;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using PrivacyFinalProject.Helpers;
-using System.Net.Sockets;
 
 namespace PrivacyFinalProject.View
 {
@@ -23,17 +11,22 @@ namespace PrivacyFinalProject.View
     /// </summary>
     public partial class LoginView : Window
     {
-
-        public LoginView()
+		ServerFunctions s = new ServerFunctions();
+		public LoginView()
         {
+			s.ConnectToServer();
 
-            InitializeComponent();
-            DataBase.CreateDatabase();
+			InitializeComponent();
+		}
 
-        }
+		public LoginView(ref ServerFunctions SF)
+		{
+            s = SF;
 
+			InitializeComponent();
+		}
 
-    private void Window_MouseDown(object sender, MouseButtonEventArgs e)
+		private void Window_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (e.LeftButton == MouseButtonState.Pressed)
             {
@@ -48,10 +41,11 @@ namespace PrivacyFinalProject.View
 
         private void btnClose_Click(object sender, RoutedEventArgs e)
         {
-            Application.Current.Shutdown();
+			s.client.Close();
+			Application.Current.Shutdown();
         }
 
-        private void btnLogin_Click(object sender, RoutedEventArgs e)
+        private async void btnLogin_Click(object sender, RoutedEventArgs e)
         {
 
             // Get Credentials
@@ -63,39 +57,42 @@ namespace PrivacyFinalProject.View
             if (firstName.Length > 0 && lastName.Length > 0 && password.Length > 0)
             {
 
-                // Validate Credentials in DB
+				// Validate Credentials in DB
+				byte[] buffer = Encoding.UTF8.GetBytes($"[LOGIN]{firstName},{lastName},{password}");
+				s.stream.Write(buffer, 0, buffer.Length);
+				s.stream.Flush();
 
-                if (DataBase.CheckPassword(firstName, lastName, password))
+				int bytesRead = await s.stream.ReadAsync(buffer, 0, buffer.Length);
+				string message = Encoding.UTF8.GetString(buffer, 0, bytesRead).Trim();
+
+				if (message == "True")
                 {
+					// Create and show the ChatView window.
+					ChatView chatView = new ChatView(firstName, lastName, ref s);
+					chatView.Show();
 
-                    // Create and show the ChatView window.
-                    ChatView chatView = new ChatView(firstName, lastName);
-                    chatView.Show();
+					// Bring the new window to the foreground.
+					chatView.Activate();
 
-                    // Bring the new window to the foreground.
-                    chatView.Activate();
-
-                    // Close the current window or hide it before showing the new window.
-                    this.Close(); // Use this if you want to close the current window.
-                                  // this.Hide(); // Use this if you just want to hide the current window.
+					// Close the current window or hide it before showing the new window.
+					this.Close(); // Use this if you want to close the current window.
                 }
-                else
-                {
+				else
+				{
                     return;
-                }
-
-            }
-            else
-            {
+				}
+			}
+			else
+			{
                 return;
-            }
+			}
 
-        }
+		}
 
         private void btnResetPassword_Click(object sender, RoutedEventArgs e)
         {
             // Create and show the ResetPasswordView window.
-            ResetPasswordView resetPasswordView = new ResetPasswordView();
+            ResetPasswordView resetPasswordView = new ResetPasswordView(ref s);
             resetPasswordView.Show();
 
             // Bring the new window to the foreground.
@@ -109,15 +106,15 @@ namespace PrivacyFinalProject.View
         private void btnCreateAccount_Click(object sender, RoutedEventArgs e)
         {
             // Create and show the CreateAccountView window.
-            CreateAccountView createAccountView = new CreateAccountView();
+            CreateAccountView createAccountView = new CreateAccountView(ref s);
             createAccountView.Show();
 
             // Bring the new window to the foreground.
             createAccountView.Activate();
 
             // Close the current window or hide it before showing the new window.
-            this.Close(); // Use this if you want to close the current window.
-            // this.Hide(); // Use this if you just want to hide the current window.
+            //this.Close(); // Use this if you want to close the current window.
+            this.Hide(); // Use this if you just want to hide the current window.
         }
     }
 }

@@ -9,8 +9,10 @@ namespace PrivacyFinalProject.View
     /// </summary>
     public partial class ResetPasswordView : Window
     {
-        public ResetPasswordView()
+        ServerFunctions SF;
+		public ResetPasswordView(ref ServerFunctions s)
         {
+            SF = s;
             InitializeComponent();
         }
 
@@ -47,21 +49,21 @@ namespace PrivacyFinalProject.View
                 if (password != resetPassword)
                 {
 
-                    // Reset the account password in the database
-                    if (DataBase.ResetPassword(firstName, lastName, password, resetPassword))
-                    {
-                        // Create and show the LoginView window.
-                        LoginView loginView = new LoginView();
-                        loginView.Show();
+                    //// Reset the account password in the database
+                    //if (DataBase.ResetPassword(firstName, lastName, password, resetPassword))
+                    //{
+                    //    // Create and show the LoginView window.
+                    //    LoginView loginView = new LoginView(ref SF);
+                    //    loginView.Show();
 
-                        // Bring the new window to the foreground.
-                        loginView.Activate();
+                    //    // Bring the new window to the foreground.
+                    //    loginView.Activate();
 
-                        // Close the current window or hide it before showing the new window.
-                        this.Close(); // Use this if you want to close the current window.
-                                      // this.Hide(); // Use this if you just want to hide the current window.
-                    }
-                    else { return; }
+                    //    // Close the current window or hide it before showing the new window.
+                    //    this.Close(); // Use this if you want to close the current window.
+                    //                  // this.Hide(); // Use this if you just want to hide the current window.
+                    //}
+                    //else { return; }
 
                 }
             }
@@ -70,7 +72,7 @@ namespace PrivacyFinalProject.View
         private void btnLogin_Click(object sender, RoutedEventArgs e)
         {
             // Create and show the LoginView window.
-            LoginView loginView = new LoginView();
+            LoginView loginView = new LoginView(ref SF);
             loginView.Show();
 
             // Bring the new window to the foreground.

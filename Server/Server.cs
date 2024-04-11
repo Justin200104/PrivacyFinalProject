@@ -37,6 +37,8 @@ namespace PrivacyFinalProject
 			server.Start();
 			Console.WriteLine("Starting Server");
 
+			DataBase.CreateDatabase();
+
 			while (true)
 			{
 				TcpClient client = server.AcceptTcpClient();
@@ -78,9 +80,10 @@ namespace PrivacyFinalProject
 
 		public void BroadcastClientList()
 		{
-			string clientList = "[CLIENTLIST]" + string.Join(",", clients.Select(c => c.username));
+			string clientList = "[CLIENTLIST]" + string.Join(",", clients.Where(c => !string.IsNullOrEmpty(c.username)).Select(c => c.username));
 			BroadcastMessage(clientList, null);
 		}
+
 	}
 
 	public class ConnectedClient
@@ -105,28 +108,60 @@ namespace PrivacyFinalProject
 		/// <summary>
 		/// Listener for the client connecting to the chatroom. Listens for incoming messages
 		/// </summary>
-		public void StartListening()
+		async public void StartListening()
 		{
 			byte[] buffer = new byte[1024];
 			while (true)
 			{
-				int bytesRead = stream.Read(buffer, 0, buffer.Length);
+				int bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length);
 				if (bytesRead == 0)
 				{
 					break;
 				}
 
 				string message = Encoding.UTF8.GetString(buffer, 0, bytesRead);
-				if (username == null)
+				if (message.StartsWith("[LOGIN]"))
 				{
-					username = message;
+					String[] login = message.Substring(7).Split(',');
+
+					String firstName = login[0];
+					String lastName = login[1];
+					String password = login[2];
+
+					bool success = DataBase.CheckPassword(firstName, lastName, password);
+					String res = success.ToString();
+
+					byte[] loginbuf = Encoding.UTF8.GetBytes(res);
+					await stream.WriteAsync(loginbuf, 0, loginbuf.Length);
+					await stream.FlushAsync();
+
+				}
+				else if(message.StartsWith("[LOGINSUCCESS]"))
+				{
+					username = message.Substring(14);
 					Console.WriteLine($"{username} has connected to the server");
 					server.BroadcastClientList();
+				}
+				else if(message.StartsWith("[CREATEACCOUNT]"))
+				{
+					String[] create = message.Substring(15).Split(',');
+
+					String firstName = create[0];
+					String lastName = create[1];
+					String password = create[2];
+
+					DataBase.InsertData(firstName, lastName, password);
+					Console.WriteLine("Create account success");
+				}
+				else if (message.StartsWith("[RESETPASSWORD]"))
+				{
+					Console.WriteLine("[RESETPASSWORD] hit");
 				}
 				else
 				{
 					server.BroadcastMessage($"[ {username} ]: {message}", this);
 				}
+				await stream.FlushAsync();
 			}
 
 			server.RemoveClient(this, this.username);

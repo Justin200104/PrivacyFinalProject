@@ -1,4 +1,5 @@
 using System.IO;
+using System.Text;
 using System.Windows;
 using System.Windows.Input;
 using PrivacyFinalProject.Helpers;
@@ -10,8 +11,10 @@ namespace PrivacyFinalProject.View
     /// </summary>
     public partial class CreateAccountView : Window
     {
-        public CreateAccountView()
+        ServerFunctions SF;
+		public CreateAccountView(ref ServerFunctions s)
         {
+            SF = s;
             InitializeComponent();
         }
 
@@ -30,6 +33,7 @@ namespace PrivacyFinalProject.View
 
         private void btnClose_Click(object sender, RoutedEventArgs e)
         {
+            SF.client.Close();
             Application.Current.Shutdown();
         }
 
@@ -51,11 +55,13 @@ namespace PrivacyFinalProject.View
 
                     if (chkConsent.IsChecked ?? false)
                     {
-                        // Create the account in the database
-                        DataBase.InsertData(firstName, lastName, password);
+						//send account to server
+						byte[] buffer = Encoding.UTF8.GetBytes($"[CREATEACCOUNT]{firstName},{lastName},{password}");
+						SF.stream.Write(buffer, 0, buffer.Length);
+						SF.stream.Flush();
 
-                        // Create and show the LoginView window.
-                        LoginView loginView = new LoginView();
+						// Create and show the LoginView window.
+						LoginView loginView = new LoginView(ref SF);
                         loginView.Show();
 
                         // Bring the new window to the foreground.
@@ -73,7 +79,7 @@ namespace PrivacyFinalProject.View
         private void btnLogin_Click(object sender, RoutedEventArgs e)
         {
             // Create and show the LoginView window.
-            LoginView loginView = new LoginView();
+            LoginView loginView = new LoginView(ref SF);
             loginView.Show();
 
             // Bring the new window to the foreground.

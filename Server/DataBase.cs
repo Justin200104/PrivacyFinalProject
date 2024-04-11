@@ -1,6 +1,6 @@
 ﻿using System.Data.SQLite;
 using System.IO;
-namespace PrivacyFinalProject.Helpers
+namespace PrivacyFinalProject
 {
     public static class DataBase
     {
