@@ -46,13 +46,24 @@ namespace PrivacyFinalProject.View
             if (firstName.Length > 0 && lastName.Length > 0 && password.Length > 0)
             {
 				s.ConnectToServer();
-				// Validate Credentials in DB
-				byte[] buffer = Encoding.UTF8.GetBytes($"[LOGIN]{firstName},{lastName},{password}");
+                // Validate Credentials in DB
+                String hashedFirstName = Pseudoanonymization.HashString(firstName);
+                String hashedLastName = Pseudoanonymization.HashString(lastName);
+                String hashedPass = Pseudoanonymization.HashString(password);
+
+                AES aes = new AES();
+
+                byte[] iv = Encoding.UTF8.GetBytes("1234567890123456");
+                byte[] key = Encoding.UTF8.GetBytes("1234567890123456");
+                string loginString = $"[LOGIN]{hashedFirstName},{hashedLastName},{hashedPass}";
+
+                //send account to server
+                byte[] buffer = aes.EncryptStringToBytes_Aes(loginString, key, iv);
 				s.stream.Write(buffer, 0, buffer.Length);
 				s.stream.Flush();
 
 				int bytesRead = await s.stream.ReadAsync(buffer, 0, buffer.Length);
-				string message = Encoding.UTF8.GetString(buffer, 0, bytesRead).Trim();
+                string message = aes.DecryptStringFromBytes_Aes(buffer, key, iv);
 
 				if (message == "True")
                 {

@@ -126,8 +126,15 @@ namespace PrivacyFinalProject
 					break;
 				}
 
-				string message = Encoding.UTF8.GetString(buffer, 0, bytesRead);
-				if (message.StartsWith("[LOGIN]"))
+                AES aes = new AES();
+
+                byte[] iv = Encoding.UTF8.GetBytes("1234567890123456");
+                byte[] key = Encoding.UTF8.GetBytes("1234567890123456");
+
+                string message = aes.DecryptStringFromBytes_Aes(buffer,key,iv);
+
+                Console.WriteLine($"[{server.GetTime()}] {message}");
+                if (message.StartsWith("[LOGIN]"))
 				{
 					String[] login = message.Substring(7).Split(',');
 

@@ -49,8 +49,23 @@ namespace PrivacyFinalProject.View
                 if (password != resetPassword)
                 {
                     SF.ConnectToServer();
-					//send account to server
-					byte[] buffer = Encoding.UTF8.GetBytes($"[RESETPASSWORD]{firstName},{lastName},{password},{resetPassword}");
+                    //send account to server
+
+                    // Validate Credentials in DB
+                    String hashedFirstName = Pseudoanonymization.HashString(firstName);
+                    String hashedLastName = Pseudoanonymization.HashString(lastName);
+                    String hashedPass = Pseudoanonymization.HashString(password);
+                    String resetPass = Pseudoanonymization.HashString(resetPassword);
+
+                    AES aes = new AES();
+
+                    byte[] iv = Encoding.UTF8.GetBytes("1234567890123456");
+                    byte[] key = Encoding.UTF8.GetBytes("1234567890123456");
+                    string resetPasswordString = $"[RESETPASSWORD]{firstName},{lastName},{password},{resetPassword}";
+
+                    //send account to server
+                    byte[] buffer = aes.EncryptStringToBytes_Aes(resetPasswordString, key, iv);
+
 					SF.stream.Write(buffer, 0, buffer.Length);
 					SF.stream.Flush();
 

@@ -43,9 +43,16 @@ namespace PrivacyFinalProject.View
                         break;
                     }
 
-					string message = Encoding.UTF8.GetString(buffer, 0, bytesRead);
+                    AES aes = new AES();
+
+                    byte[] iv = Encoding.UTF8.GetBytes("1234567890123456");
+                    byte[] key = Encoding.UTF8.GetBytes("1234567890123456");
+
+                    string message = aes.DecryptStringFromBytes_Aes(buffer,key,iv);
+
+                    //string message = Encoding.UTF8.GetString(buffer, 0, bytesRead).Trim();
 					if (message.StartsWith("[CLIENTLIST]"))
-					{
+					{ 
 						string[] clients = message.Substring(12).Split(',');
 						SF.connectedClients.Clear();
 						SF.connectedClients.AddRange(clients);
@@ -200,8 +207,17 @@ namespace PrivacyFinalProject.View
         {
             var formattedMessage = $"[{SF.GetTime()}] [ {sender} ]: {message}";
 
-			// Send the message to the server instead of adding it client-side
-			byte[] buffer = Encoding.UTF8.GetBytes(message);
+            AES aes = new AES();
+
+            byte[] iv = Encoding.UTF8.GetBytes("1234567890123456");
+            byte[] key = Encoding.UTF8.GetBytes("1234567890123456");
+
+            byte[] buffer = aes.EncryptStringToBytes_Aes(message, key, iv);
+
+            
+            
+            //Send the message to the server instead of adding it client-side
+            //buffer = Encoding.UTF8.GetBytes(test);
 			SF.stream.Write(buffer, 0, buffer.Length);
 			SF.stream.Flush();
 
