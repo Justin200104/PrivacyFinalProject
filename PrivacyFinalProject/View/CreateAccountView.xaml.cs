@@ -1,7 +1,10 @@
 using System.IO;
+using System.Text;
 using System.Windows;
 using System.Windows.Input;
 using PrivacyFinalProject.Helpers;
+using System.Security.Cryptography;
+using System;
 
 namespace PrivacyFinalProject.View
 {
@@ -10,7 +13,8 @@ namespace PrivacyFinalProject.View
     /// </summary>
     public partial class CreateAccountView : Window
     {
-        public CreateAccountView()
+		ServerFunctions SF = new ServerFunctions();
+		public CreateAccountView()
         {
             InitializeComponent();
         }
@@ -51,9 +55,13 @@ namespace PrivacyFinalProject.View
 
                     if (chkConsent.IsChecked ?? false)
                     {
-                        // Create the account in the database
-                        DataBase.InsertData(firstName, lastName, password);
+                        SF.ConnectToServer();
 
+                        string createAccountString = $"[CREATEACCOUNT]{firstName},{lastName},{password}";
+                        string strBuffer = AES.EncryptString(createAccountString);
+                        byte[] buffer = Encoding.UTF8.GetBytes(strBuffer);
+                        SF.stream.Write(buffer, 0, buffer.Length);
+                        SF.stream.Flush();
                         // Create and show the LoginView window.
                         LoginView loginView = new LoginView();
                         loginView.Show();
@@ -61,6 +69,7 @@ namespace PrivacyFinalProject.View
                         // Bring the new window to the foreground.
                         loginView.Activate();
 
+                        SF.client.Close();
                         // Close the current window or hide it before showing the new window.
                         this.Close(); // Use this if you want to close the current window.
                         // this.Hide(); // Use this if you just want to hide the current window.

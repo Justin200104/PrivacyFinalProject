@@ -1,20 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.NetworkInformation;
-using System.Net.Sockets;
+﻿using PrivacyFinalProject.Helpers;
+using System.IO;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using PrivacyFinalProject.Helpers;
-using System.Net.Sockets;
 
 namespace PrivacyFinalProject.View
 {
@@ -23,17 +11,13 @@ namespace PrivacyFinalProject.View
     /// </summary>
     public partial class LoginView : Window
     {
-
-        public LoginView()
+		ServerFunctions s = new ServerFunctions();
+		public LoginView()
         {
+			InitializeComponent();
+		}
 
-            InitializeComponent();
-            DataBase.CreateDatabase();
-
-        }
-
-
-    private void Window_MouseDown(object sender, MouseButtonEventArgs e)
+		private void Window_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (e.LeftButton == MouseButtonState.Pressed)
             {
@@ -48,49 +32,57 @@ namespace PrivacyFinalProject.View
 
         private void btnClose_Click(object sender, RoutedEventArgs e)
         {
-            Application.Current.Shutdown();
+			Application.Current.Shutdown();
         }
 
-        private void btnLogin_Click(object sender, RoutedEventArgs e)
+        private async void btnLogin_Click(object sender, RoutedEventArgs e)
         {
-
-            // Get Credentials
-            String firstName = txtUserFirst.Text;
+			// Get Credentials
+			String firstName = txtUserFirst.Text;
             String lastName = txtUserLast.Text;
             String password = txtPass.Password;
 
             // Ensure fields are not empty
             if (firstName.Length > 0 && lastName.Length > 0 && password.Length > 0)
             {
-
+				s.ConnectToServer();
                 // Validate Credentials in DB
 
-                if (DataBase.CheckPassword(firstName, lastName, password))
+                string loginString = $"[LOGIN]{firstName},{lastName},{password}";
+
+                //send account to server
+                byte[] buffer = Encoding.UTF8.GetBytes(AES.EncryptString(loginString));
+				s.stream.Write(buffer, 0, buffer.Length);
+				s.stream.Flush();
+
+				int bytesRead = await s.stream.ReadAsync(buffer, 0, buffer.Length);
+                
+                string message = Encoding.UTF8.GetString(buffer, 0, bytesRead);
+                message = AES.DecryptString(message);
+                if (message == "True")
                 {
+					// Create and show the ChatView window.
+					ChatView chatView = new ChatView(firstName, lastName, ref s);
+					chatView.Show();
 
-                    // Create and show the ChatView window.
-                    ChatView chatView = new ChatView(firstName, lastName);
-                    chatView.Show();
+					// Bring the new window to the foreground.
+					chatView.Activate();
 
-                    // Bring the new window to the foreground.
-                    chatView.Activate();
-
-                    // Close the current window or hide it before showing the new window.
-                    this.Close(); // Use this if you want to close the current window.
-                                  // this.Hide(); // Use this if you just want to hide the current window.
+					// Close the current window or hide it before showing the new window.
+					this.Close(); // Use this if you want to close the current window.
                 }
-                else
-                {
+				else
+				{
+                    s.client.Close();
                     return;
-                }
-
-            }
-            else
-            {
+				}
+			}
+			else
+			{
                 return;
-            }
+			}
 
-        }
+		}
 
         private void btnResetPassword_Click(object sender, RoutedEventArgs e)
         {
@@ -116,8 +108,8 @@ namespace PrivacyFinalProject.View
             createAccountView.Activate();
 
             // Close the current window or hide it before showing the new window.
-            this.Close(); // Use this if you want to close the current window.
-            // this.Hide(); // Use this if you just want to hide the current window.
+            //this.Close(); // Use this if you want to close the current window.
+            this.Hide(); // Use this if you just want to hide the current window.
         }
     }
 }

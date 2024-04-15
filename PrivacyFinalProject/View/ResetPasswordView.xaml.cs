@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Text;
+using System.Windows;
 using System.Windows.Input;
 using PrivacyFinalProject.Helpers;
 
@@ -9,7 +10,8 @@ namespace PrivacyFinalProject.View
     /// </summary>
     public partial class ResetPasswordView : Window
     {
-        public ResetPasswordView()
+        ServerFunctions SF = new ServerFunctions();
+		public ResetPasswordView()
         {
             InitializeComponent();
         }
@@ -43,27 +45,40 @@ namespace PrivacyFinalProject.View
             // Ensure fields are not empty
             if (firstName.Length > 0 && lastName.Length > 0 && password.Length > 0 && resetPassword.Length > 0)
             {
-                // Ensure passwords are equal
+                // Ensure passwords are not equal
                 if (password != resetPassword)
                 {
+                    SF.ConnectToServer();
+                    // Validate Credentials in DB                  
+                    //send account to server
+                    string resetPasswordString = AES.EncryptString($"[RESETPASSWORD]{firstName},{lastName},{password},{resetPassword}");
+                    byte[] buffer = Encoding.UTF8.GetBytes(resetPasswordString);
+					SF.stream.Write(buffer, 0, buffer.Length);
+					SF.stream.Flush();
 
-                    // Reset the account password in the database
-                    if (DataBase.ResetPassword(firstName, lastName, password, resetPassword))
-                    {
-                        // Create and show the LoginView window.
-                        LoginView loginView = new LoginView();
-                        loginView.Show();
+					int bytesRead = SF.stream.Read(buffer, 0, buffer.Length);
+                    
+					string message = Encoding.UTF8.GetString(buffer, 0, bytesRead).Trim();
+                    string decriptedMsg = AES.DecryptString(message);
+                    if (decriptedMsg == "True")
+					{
+						LoginView loginView = new LoginView();
+						loginView.Show();
 
-                        // Bring the new window to the foreground.
-                        loginView.Activate();
+						// Bring the new window to the foreground.
+						loginView.Activate();
 
-                        // Close the current window or hide it before showing the new window.
-                        this.Close(); // Use this if you want to close the current window.
-                                      // this.Hide(); // Use this if you just want to hide the current window.
-                    }
-                    else { return; }
-
-                }
+						SF.client.Close();
+						// Close the current window or hide it before showing the new window.
+						this.Close(); // Use this if you want to close the current window.
+									  // this.Hide(); // Use this if you just want to hide the current window.
+					}
+					else
+					{
+						SF.client.Close();
+						return;
+					}
+				}
             }
         }
 
@@ -76,8 +91,8 @@ namespace PrivacyFinalProject.View
             // Bring the new window to the foreground.
             loginView.Activate();
 
-            // Close the current window or hide it before showing the new window.
-            this.Close(); // Use this if you want to close the current window.
+			// Close the current window or hide it before showing the new window.
+			this.Close(); // Use this if you want to close the current window.
             // this.Hide(); // Use this if you just want to hide the current window.
         }
     }

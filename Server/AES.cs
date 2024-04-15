@@ -1,11 +1,10 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 
 namespace PrivacyFinalProject
 {
-
+  
     public class AES
     {
         // AES Key and Initialization Vector. They need to be secure and usually stored in a secure place.
