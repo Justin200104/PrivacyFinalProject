@@ -5,6 +5,7 @@ using System.Net.Sockets;
 using System.Reflection;
 using System.Text;
 using System.Threading;
+using System.Security.Cryptography;	
 
 namespace PrivacyFinalProject
 {
@@ -61,10 +62,17 @@ namespace PrivacyFinalProject
 		{
 			foreach (ConnectedClient client in clients)
 			{
-				if (client != sender)
+                string encryptedMsg = AES.EncryptString(message);
+                if (client != sender)
 				{
-					client.SendMessage(message);
+					Console.WriteLine($"{client}: OriginalMessage: {message}\n{client}: Encrypted Message:{encryptedMsg}");
+
+					client.SendMessage(encryptedMsg);
 				}
+				else
+				{
+                    Console.WriteLine($"{client}: OriginalMessage: {message}\n{client}: Encrypted Message:{encryptedMsg}");
+                }
 			}
 		}
 
@@ -125,15 +133,9 @@ namespace PrivacyFinalProject
 				{
 					break;
 				}
-
-                AES aes = new AES();
-
-                byte[] iv = Encoding.UTF8.GetBytes("1234567890123456");
-                byte[] key = Encoding.UTF8.GetBytes("1234567890123456");
-
-                string message = aes.DecryptStringFromBytes_Aes(buffer,key,iv);
-
-                Console.WriteLine($"[{server.GetTime()}] {message}");
+				
+                string message = AES.DecryptString(Encoding.UTF8.GetString(buffer, 0, bytesRead));
+               
                 if (message.StartsWith("[LOGIN]"))
 				{
 					String[] login = message.Substring(7).Split(',');
@@ -142,10 +144,16 @@ namespace PrivacyFinalProject
 					String lastName = login[1];
 					String password = login[2];
 
-					bool success = DataBase.CheckPassword(firstName, lastName, password);
-					String res = success.ToString();
+                    String ProtectedFirstName = Pseudoanonymization.HashString(AES.EncryptString(firstName));
+                    String ProtectedLastName = Pseudoanonymization.HashString(AES.EncryptString(lastName));
+                    String ProtectedPassword = Pseudoanonymization.HashString(AES.EncryptString(password));
 
-					byte[] loginbuf = Encoding.UTF8.GetBytes(res);
+					Console.WriteLine($"[{server.GetTime()}] {ProtectedFirstName} {ProtectedLastName} is attempting to login");
+
+                    bool success = DataBase.CheckPassword(ProtectedFirstName, ProtectedLastName, ProtectedPassword);
+					String res = success.ToString();
+					
+					byte[] loginbuf = Encoding.UTF8.GetBytes(AES.EncryptString(res));
 					await stream.WriteAsync(loginbuf, 0, loginbuf.Length);
 					await stream.FlushAsync();
 
@@ -164,25 +172,38 @@ namespace PrivacyFinalProject
 				{
 					String[] create = message.Substring(15).Split(',');
 
-					String firstName = create[0];
-					String lastName = create[1];
-					String password = create[2];
+                    String firstName = create[0];
+                    String lastName = create[1];
+                    String password = create[2];
 
-					DataBase.InsertData(firstName, lastName, password);
+                    String ProtectedFirstName = Pseudoanonymization.HashString(AES.EncryptString(firstName));
+                    String ProtectedLastName = Pseudoanonymization.HashString(AES.EncryptString(lastName));
+                    String ProtectedPassword = Pseudoanonymization.HashString(AES.EncryptString(password));          
+
+					Console.WriteLine($"[{server.GetTime()}] {ProtectedFirstName} {ProtectedLastName} is attempting to create an account");	
+
+					DataBase.InsertData(ProtectedFirstName, ProtectedLastName, ProtectedPassword);
 					Console.WriteLine($"[{server.GetTime()}] Create account success");
 				}
 				else if (message.StartsWith("[RESETPASSWORD]"))
 				{
 					String[] create = message.Substring(15).Split(',');
+                    String firstName = create[0];
+                    String lastName = create[1];
+                    String password = create[2];
+                    String resetpass = create[3];
 
-					String firstName = create[0];
-					String lastName = create[1];
-					String password = create[2];
-					String resetpass = create[3];
+                    String ProtectedFirstName = Pseudoanonymization.HashString(AES.EncryptString(firstName));
+                    String ProtectedLastName = Pseudoanonymization.HashString(AES.EncryptString(lastName));
+                    String ProtectedPassword = Pseudoanonymization.HashString(AES.EncryptString(password));
+					String ProtectedResetPass = Pseudoanonymization.HashString(AES.EncryptString(resetpass));
 
-					bool success = DataBase.ResetPassword(firstName, lastName, password, resetpass);
+					Console.WriteLine($"[{server.GetTime()}] {ProtectedFirstName} {ProtectedLastName} is attempting to reset password");
+
+                    bool success = DataBase.ResetPassword(ProtectedFirstName, ProtectedLastName, ProtectedPassword, ProtectedResetPass);
 					String res = success.ToString();
-					byte[] resetbuf = Encoding.UTF8.GetBytes(res);
+					byte[] resetbuf = Encoding.UTF8.GetBytes(AES.EncryptString(res));
+
 					await stream.WriteAsync(resetbuf, 0, resetbuf.Length);
 					await stream.FlushAsync();
 

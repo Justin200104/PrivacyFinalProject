@@ -43,17 +43,12 @@ namespace PrivacyFinalProject.View
                         break;
                     }
 
-                    AES aes = new AES();
 
-                    byte[] iv = Encoding.UTF8.GetBytes("1234567890123456");
-                    byte[] key = Encoding.UTF8.GetBytes("1234567890123456");
-
-                    string message = aes.DecryptStringFromBytes_Aes(buffer,key,iv);
-
-                    //string message = Encoding.UTF8.GetString(buffer, 0, bytesRead).Trim();
-					if (message.StartsWith("[CLIENTLIST]"))
+                    string message = Encoding.UTF8.GetString(buffer, 0, bytesRead).Trim();
+                    string decryptedMessage = AES.DecryptString(message);
+					if (decryptedMessage.StartsWith("[CLIENTLIST]"))
 					{ 
-						string[] clients = message.Substring(12).Split(',');
+						string[] clients = decryptedMessage.Substring(12).Split(',');
 						SF.connectedClients.Clear();
 						SF.connectedClients.AddRange(clients);
 						Dispatcher.Invoke(() =>
@@ -66,7 +61,7 @@ namespace PrivacyFinalProject.View
 					{
 						Dispatcher.Invoke(() =>
 						{
-							chatMessagesListBox.Items.Add(message);
+							chatMessagesListBox.Items.Add(decryptedMessage);
 						});
 					}
 				}
@@ -143,8 +138,9 @@ namespace PrivacyFinalProject.View
 
             // Set LoggedInUser
             loggedInUser = pseudonimizedName;
-			// Send this participant to the server;
-			byte[] buffer = Encoding.UTF8.GetBytes($"[LOGINSUCCESS]{pseudonimizedName}");
+            byte[] buffer = Encoding.UTF8.GetBytes(AES.EncryptString($"[LOGINSUCCESS]{pseudonimizedName}"));
+
+            // Send this participant to the server;
 			await SF.stream.WriteAsync(buffer, 0, buffer.Length);
 			await SF.stream.FlushAsync();
 		}
@@ -206,18 +202,9 @@ namespace PrivacyFinalProject.View
         public void AddChatMessage(string sender, string message)
         {
             var formattedMessage = $"[{SF.GetTime()}] [ {sender} ]: {message}";
-
-            AES aes = new AES();
-
-            byte[] iv = Encoding.UTF8.GetBytes("1234567890123456");
-            byte[] key = Encoding.UTF8.GetBytes("1234567890123456");
-
-            byte[] buffer = aes.EncryptStringToBytes_Aes(message, key, iv);
-
-            
+            byte[] buffer = Encoding.UTF8.GetBytes(AES.EncryptString(message));
             
             //Send the message to the server instead of adding it client-side
-            //buffer = Encoding.UTF8.GetBytes(test);
 			SF.stream.Write(buffer, 0, buffer.Length);
 			SF.stream.Flush();
 

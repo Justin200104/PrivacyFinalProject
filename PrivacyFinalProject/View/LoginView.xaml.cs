@@ -47,25 +47,19 @@ namespace PrivacyFinalProject.View
             {
 				s.ConnectToServer();
                 // Validate Credentials in DB
-                String hashedFirstName = Pseudoanonymization.HashString(firstName);
-                String hashedLastName = Pseudoanonymization.HashString(lastName);
-                String hashedPass = Pseudoanonymization.HashString(password);
 
-                AES aes = new AES();
-
-                byte[] iv = Encoding.UTF8.GetBytes("1234567890123456");
-                byte[] key = Encoding.UTF8.GetBytes("1234567890123456");
-                string loginString = $"[LOGIN]{hashedFirstName},{hashedLastName},{hashedPass}";
+                string loginString = $"[LOGIN]{firstName},{lastName},{password}";
 
                 //send account to server
-                byte[] buffer = aes.EncryptStringToBytes_Aes(loginString, key, iv);
+                byte[] buffer = Encoding.UTF8.GetBytes(AES.EncryptString(loginString));
 				s.stream.Write(buffer, 0, buffer.Length);
 				s.stream.Flush();
 
 				int bytesRead = await s.stream.ReadAsync(buffer, 0, buffer.Length);
-                string message = aes.DecryptStringFromBytes_Aes(buffer, key, iv);
-
-				if (message == "True")
+                
+                string message = Encoding.UTF8.GetString(buffer, 0, bytesRead);
+                message = AES.DecryptString(message);
+                if (message == "True")
                 {
 					// Create and show the ChatView window.
 					ChatView chatView = new ChatView(firstName, lastName, ref s);

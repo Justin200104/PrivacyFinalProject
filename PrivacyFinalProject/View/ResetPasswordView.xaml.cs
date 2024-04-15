@@ -49,30 +49,18 @@ namespace PrivacyFinalProject.View
                 if (password != resetPassword)
                 {
                     SF.ConnectToServer();
+                    // Validate Credentials in DB                  
                     //send account to server
-
-                    // Validate Credentials in DB
-                    String hashedFirstName = Pseudoanonymization.HashString(firstName);
-                    String hashedLastName = Pseudoanonymization.HashString(lastName);
-                    String hashedPass = Pseudoanonymization.HashString(password);
-                    String resetPass = Pseudoanonymization.HashString(resetPassword);
-
-                    AES aes = new AES();
-
-                    byte[] iv = Encoding.UTF8.GetBytes("1234567890123456");
-                    byte[] key = Encoding.UTF8.GetBytes("1234567890123456");
-                    string resetPasswordString = $"[RESETPASSWORD]{firstName},{lastName},{password},{resetPassword}";
-
-                    //send account to server
-                    byte[] buffer = aes.EncryptStringToBytes_Aes(resetPasswordString, key, iv);
-
+                    string resetPasswordString = AES.EncryptString($"[RESETPASSWORD]{firstName},{lastName},{password},{resetPassword}");
+                    byte[] buffer = Encoding.UTF8.GetBytes(resetPasswordString);
 					SF.stream.Write(buffer, 0, buffer.Length);
 					SF.stream.Flush();
 
 					int bytesRead = SF.stream.Read(buffer, 0, buffer.Length);
+                    
 					string message = Encoding.UTF8.GetString(buffer, 0, bytesRead).Trim();
-
-					if (message == "True")
+                    string decriptedMsg = AES.DecryptString(message);
+                    if (decriptedMsg == "True")
 					{
 						LoginView loginView = new LoginView();
 						loginView.Show();

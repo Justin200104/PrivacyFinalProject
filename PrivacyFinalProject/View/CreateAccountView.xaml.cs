@@ -3,6 +3,8 @@ using System.Text;
 using System.Windows;
 using System.Windows.Input;
 using PrivacyFinalProject.Helpers;
+using System.Security.Cryptography;
+using System;
 
 namespace PrivacyFinalProject.View
 {
@@ -55,23 +57,13 @@ namespace PrivacyFinalProject.View
                     {
                         SF.ConnectToServer();
 
-                        String hashedFirstName = Pseudoanonymization.HashString(firstName);
-                        String hashedLastName = Pseudoanonymization.HashString(lastName);
-                        String hashedPass = Pseudoanonymization.HashString(password);
-
-                        AES aes = new AES();
-
-                        byte[] iv = Encoding.UTF8.GetBytes("1234567890123456");
-                        byte[] key = Encoding.UTF8.GetBytes("1234567890123456");
-                        string createAccountString = $"[CREATEACCOUNT]{hashedFirstName},{hashedLastName},{hashedPass}";
-                       
-                        //send account to server
-                        byte[] buffer = aes.EncryptStringToBytes_Aes(createAccountString, key, iv);
+                        string createAccountString = $"[CREATEACCOUNT]{firstName},{lastName},{password}";
+                        string strBuffer = AES.EncryptString(createAccountString);
+                        byte[] buffer = Encoding.UTF8.GetBytes(strBuffer);
                         SF.stream.Write(buffer, 0, buffer.Length);
-						SF.stream.Flush();
-
-						// Create and show the LoginView window.
-						LoginView loginView = new LoginView();
+                        SF.stream.Flush();
+                        // Create and show the LoginView window.
+                        LoginView loginView = new LoginView();
                         loginView.Show();
 
                         // Bring the new window to the foreground.
