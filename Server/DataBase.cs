@@ -155,6 +155,59 @@ namespace PrivacyFinalProject
             return false;
         }
 
+		public static bool DeleteAccount(string firstName, string lastName, string password)
+		{
+			string username = $"{firstName} {lastName}";
 
-    }
+			string dbFilePath = @"..\..\..\DB\PrivacyDB.sqlite";
+
+			if (File.Exists(dbFilePath))
+			{
+				try
+				{
+					using (SQLiteConnection m_dbConnection = new SQLiteConnection($"Data Source={dbFilePath};Version=3;"))
+					{
+						m_dbConnection.Open();
+
+						// Check if the password matches the one stored in the database for the given username
+						string sqlCheckPassword = "SELECT password FROM userinfo WHERE username = @username";
+						using (SQLiteCommand commandCheckPassword = new SQLiteCommand(sqlCheckPassword, m_dbConnection))
+						{
+							commandCheckPassword.Parameters.AddWithValue("@username", username);
+							object result = commandCheckPassword.ExecuteScalar();
+							if (result != null && result.ToString() == password)
+							{
+								// Password matches, delete the account
+								string sqlDeleteAccount = "DELETE FROM userinfo WHERE username = @username";
+								using (SQLiteCommand commandDeleteAccount = new SQLiteCommand(sqlDeleteAccount, m_dbConnection))
+								{
+									commandDeleteAccount.Parameters.AddWithValue("@username", username);
+									int rowsAffected = commandDeleteAccount.ExecuteNonQuery();
+
+									if (rowsAffected > 0)
+									{
+										// Account deleted successfully
+										return true;
+									}
+								}
+							}
+						}
+					}
+				}
+				catch (Exception ex)
+				{
+					Console.WriteLine($"An error occurred when deleting account: {ex.Message}");
+					// Log or handle the error as needed
+					return false;
+				}
+			}
+			else
+			{
+				CreateDatabase();
+			}
+
+			return false;
+		}
+
+	}
 }

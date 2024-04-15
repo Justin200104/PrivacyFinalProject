@@ -212,6 +212,32 @@ namespace PrivacyFinalProject
 					else
 						Console.WriteLine($"[{server.GetTime()}] Password reset unsuccessful");
 				}
+				else if (message.StartsWith("[DELETEACCOUNT]"))
+				{
+					String[] create = message.Substring(15).Split(',');
+
+					String firstName = create[0];
+					String lastName = create[1];
+					String password = create[2];
+
+					String ProtectedFirstName = Pseudoanonymization.HashString(AES.EncryptString(firstName));
+					String ProtectedLastName = Pseudoanonymization.HashString(AES.EncryptString(lastName));
+					String ProtectedPassword = Pseudoanonymization.HashString(AES.EncryptString(password));
+
+					Console.WriteLine($"[{server.GetTime()}] Attempting to delete {ProtectedFirstName} {ProtectedLastName}");
+
+					bool success = DataBase.DeleteAccount(ProtectedFirstName, ProtectedLastName, ProtectedPassword);
+					String res = success.ToString();
+					byte[] deletebuf = Encoding.UTF8.GetBytes(AES.EncryptString(res));
+
+					await stream.WriteAsync(deletebuf, 0, deletebuf.Length);
+					await stream.FlushAsync();
+
+					if (success)
+						Console.WriteLine($"[{server.GetTime()}] Account deletion success");
+					else
+						Console.WriteLine($"[{server.GetTime()}] Account deletion unsuccessful");
+				}
 				else
 				{
 					server.BroadcastMessage($"[{server.GetTime()}] [ {username} ]: {message}", this);

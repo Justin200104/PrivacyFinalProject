@@ -111,5 +111,19 @@ namespace PrivacyFinalProject.View
             //this.Close(); // Use this if you want to close the current window.
             this.Hide(); // Use this if you just want to hide the current window.
         }
-    }
+
+		private void btnDeleteAccount_Click(object sender, RoutedEventArgs e)
+		{
+			// Create and show the DeleteAccountView window.
+			DeleteAccountView deleteAccountView = new DeleteAccountView();
+			deleteAccountView.Show();
+
+			// Bring the new window to the foreground.
+			deleteAccountView.Activate();
+
+			// Close the current window or hide it before showing the new window.
+			//this.Close(); // Use this if you want to close the current window.
+			this.Hide(); // Use this if you just want to hide the current window.
+		}
+	}
 }
