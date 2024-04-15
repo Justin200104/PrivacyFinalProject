@@ -340,7 +340,7 @@
 
                         <Button x:Name="btnLogin"  
 								BorderThickness="0"
-								Content="Log In"
+								Content="Return to Log In"
 								Background="Transparent"
 								Foreground="White"
 								FontSize="12"

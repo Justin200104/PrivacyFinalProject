@@ -97,7 +97,7 @@ namespace PrivacyFinalProject.View
         {
             try
             {
-                string pdfFileName = "SECU74010_Project.pdf"; // Update with privacy policy PDF file name
+                string pdfFileName = "SECU74010_Project_Privacy_Policy.pdf"; // Update with privacy policy PDF file name
                 string workingDirectory = Environment.CurrentDirectory;
                 string projectDirectory = Directory.GetParent(workingDirectory).Parent.Parent.FullName;
                 string pdfFilePath = System.IO.Path.Combine(projectDirectory, "Resources", pdfFileName);

@@ -298,7 +298,7 @@
                                 FontSize="12"
                                 FontFamily="Montserrat"
                                 Cursor="Hand"                           
-                                Margin="8,0,0,0"
+                                Margin="0,0,0,0"
                                 Padding="0,0,0,5"
                                 Click="btnCreateAccount_Click">
                             <Button.Style>
@@ -350,13 +350,45 @@
                                 BorderThickness="0"
                                 Content="Delete Account"
                                 Background="Transparent"
-                                Foreground="DarkGray"
                                 FontSize="12"
                                 FontFamily="Montserrat"
                                 Cursor="Hand"                           
-                                Margin="8,8,0,0"
+                                Margin="0,8,0,0"
                                 Padding="0,0,0,5"
                                 Click="btnDeleteAccount_Click" HorizontalAlignment="Center">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="Transparent" />
+                                <Setter Property="Foreground" Value="DarkGray" />
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                            <Grid Background="{TemplateBinding Background}">
+                                                <ContentPresenter />
+                                            </Grid>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Foreground" Value="Red"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+
+                    <Button x:Name="btnPrivacyPolicy"  
+                                BorderThickness="0"
+                                Content="Privacy Policy"
+                                Background="Transparent"
+                                Foreground="White"
+                                FontSize="12"
+                                FontFamily="Montserrat"
+                                Cursor="Hand"                           
+                                Margin="0,50,0,0"
+                                Padding="0,0,0,5"
+                                Click="btnPrivacyPolicy_Click" HorizontalAlignment="Center">
                         <Button.Style>
                             <Style TargetType="Button">
                                 <Setter Property="Background" Value="Transparent" />
@@ -372,7 +404,7 @@
                             </Style>
                         </Button.Style>
                     </Button>
-
+                    
                 </StackPanel>
 
             </Grid>

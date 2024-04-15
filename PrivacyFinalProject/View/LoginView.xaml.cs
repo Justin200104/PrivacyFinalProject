@@ -125,5 +125,28 @@ namespace PrivacyFinalProject.View
 			//this.Close(); // Use this if you want to close the current window.
 			this.Hide(); // Use this if you just want to hide the current window.
 		}
+
+		private void btnPrivacyPolicy_Click(object sender, RoutedEventArgs e)
+		{
+			try
+			{
+				string pdfFileName = "SECU74010_Project_Privacy_Policy.pdf"; // Update with privacy policy PDF file name
+				string workingDirectory = Environment.CurrentDirectory;
+				string projectDirectory = Directory.GetParent(workingDirectory).Parent.Parent.FullName;
+				string pdfFilePath = System.IO.Path.Combine(projectDirectory, "Resources", pdfFileName);
+
+				System.Diagnostics.ProcessStartInfo psi = new System.Diagnostics.ProcessStartInfo
+				{
+					FileName = pdfFilePath,
+					UseShellExecute = true
+				};
+
+				System.Diagnostics.Process.Start(psi);
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show("Failed to open the PDF file. Error: " + ex.Message);
+			}
+		}
 	}
 }
